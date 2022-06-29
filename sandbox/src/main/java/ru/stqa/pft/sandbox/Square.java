@@ -3,8 +3,10 @@ package ru.stqa.pft.sandbox;
 public class Square {
   public double l;
 
-  public Square(double l) {               //конструктор
-    this.l = l;       //присваивание переданного значения в атрибут объекта
+  //конструктор;
+  //присваивание переданного значения в атрибут объекта
+  public Square(double l) {
+    this.l = l;
   }
 
   public double area() {
