@@ -16,13 +16,13 @@ public class Point {
         Point p2 = new Point(30.0,50.0);     //создаем объект p2 -экземпляр класса Point (x2,y2)
 
         System.out.println("Расстояние между точками c координатами ("  + p1.x + ", " + p1.y + ")"
-                + " и " + "(" + p2.x + ", " + p2.y + ")" + " равно " + distance(p1, p2));
+                + " и " + "(" + p2.x + ", " + p2.y + ")" + " равно " + p1.distance(p2));
     }
 
     //ф-ия distance принимает на вход 2 параметра-координаты точек(объекты класса Point)
     //и возвращает вычисленное расстояние
-    public static double distance(Point p1, Point p2) {
-        return Math.sqrt((p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y -p1.y));
+    public double distance(Point p1) {
+        return Math.sqrt((this.x - p1.x)*(this.x - p1.x) + (this.y - p1.y)*(this.y -p1.y));
     }
 
 }
