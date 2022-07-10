@@ -5,7 +5,11 @@ import org.openqa.selenium.WebDriver;
 import ru.stqa.pft.addressbook.model.ContactData;
 
 public class ContactHelper {
-    protected WebDriver wd;
+    WebDriver wd;
+
+    public ContactHelper(WebDriver wd) {
+        this.wd = wd;
+    }
 
     public void returnToHomePage() {
         wd.findElement(By.linkText("home page")).click();
