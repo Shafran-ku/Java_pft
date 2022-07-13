@@ -33,13 +33,8 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
-    public void selectContact() {
+    public void selectAndInitContactModification() {
         click(By.xpath("//img[@alt='Edit']"));
-    }
-
-    public void initContactModification() {
-        click(By.linkText("update"));
-
     }
 
     public void goToHomePage() {
