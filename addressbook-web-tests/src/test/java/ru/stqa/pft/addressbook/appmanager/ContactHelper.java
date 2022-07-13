@@ -41,9 +41,8 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("home"));
     }
 
-    public void     updateContactForm() {
-        click(By.linkText("update"));
-        //click(By.xpath("//div[@id='content']/form/input[22]"));
+    public void deleteSelectedContact() {
+        click(By.xpath("//div[@id='content']/form[2]/input[2]"));
 
     }
 }
