@@ -9,7 +9,7 @@ import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
 //перед каждым тестовым методом инициализирует объект типа ApplicationManager, после того как метод отработал - разрушает его
 public class TestBase {
 
-    protected final ApplicationManager app = new ApplicationManager(BrowserType.CHROME);    //выбор нужного браузера IE CHROME FIREFOX
+    protected final ApplicationManager app = new ApplicationManager(BrowserType.FIREFOX);    //выбор нужного браузера IE CHROME FIREFOX
 
     @BeforeMethod(alwaysRun = true)
     public void setUp() throws Exception {
