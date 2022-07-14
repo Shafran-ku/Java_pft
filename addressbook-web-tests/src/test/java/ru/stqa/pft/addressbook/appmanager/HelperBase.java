@@ -29,8 +29,11 @@ public class HelperBase {
         click(locator);
         //если в поле передали null, то поле не заполняем, иначе чистим значением поля и заполняем
         if (text != null) {
-            wd.findElement(locator).clear();
-            wd.findElement(locator).sendKeys(text);
+            String existingText = wd.findElement(locator).getAttribute("value");
+            if (! text.equals(existingText)) {
+                wd.findElement(locator).clear();
+                wd.findElement(locator).sendKeys(text);
+            }
         }
     }
 }
