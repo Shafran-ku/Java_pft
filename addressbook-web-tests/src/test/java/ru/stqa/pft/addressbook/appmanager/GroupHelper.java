@@ -54,4 +54,9 @@ public class GroupHelper extends HelperBase {
     public boolean isThereAGroup() {
         return isElementPresent(By.name("selected[]"));
     }
+
+    //подсчитать кол-во элементов "selected[]" на странице (кол-во групп)
+    public int getGroupCounter() {
+        return wd.findElements(By.name("selected[]")).size();
+    }
 }
