@@ -59,6 +59,7 @@ public class ContactHelper extends HelperBase {
         returnToHomePage();
     }
 
+    //проверка наличия иконки редактирования (чтобы понять есть ли хоть один контакт для удаления на форме )
     public boolean isThereAGroup() {
         return isElementPresent(By.xpath("//img[@alt='Edit']"));
     }
