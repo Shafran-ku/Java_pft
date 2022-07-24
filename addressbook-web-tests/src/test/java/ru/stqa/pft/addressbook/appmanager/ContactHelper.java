@@ -21,6 +21,7 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("//div[@id='content']/form/input[21]"));
     }
 
+    //вторым параметром передаем инф-ию о том, является ли это заполнение формы нового контакта или нет(true:да, false:нет)
     public void fillContactForm(ContactData contactData, boolean creation) {
         type(By.name("firstname"), contactData.getFirstname());
         click(By.name("firstname"));
@@ -30,12 +31,18 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contactData.getEmail());
         type(By.name("home"), contactData.getHomephone());
 
-        //проверка наличия(отсутствия)элемента выбора групп при создании контакта и модификации контакта 
+
+//Если это создание контакта, то проверяем наличие выпадающего списка групп "new_group"
+//+проверка: если модификация контакта, то выпадающего списка групп быть не должно
+
+        //если это форма создания
         if (creation) {
-            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-        } else {
-            Assert.assertFalse(isElementPresent(By.name("new_group")));
-        }
+            if (isElementPresent(By.name(contactData.getGroup()))) {
+                //выбрать из списка групп какой нибудь элемент
+                new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+            } else new Select(wd.findElement(By.name("new_group"))).getFirstSelectedOption();
+        //иначе проверить отсутствие выпадающего списка "new_group"
+        } else Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
 
     public void initContactCreation() {
@@ -59,13 +66,17 @@ public class ContactHelper extends HelperBase {
         returnToHomePage();
     }
 
+    /*
+
     //проверка наличия иконки редактирования (чтобы понять есть ли хоть один контакт для удаления на форме)
     public boolean isThereAGroup() {
         return isElementPresent(By.xpath("//img[@alt='Edit']"));
     }
 
-    public boolean isAnyGroupExist() {
-        return isElementPresent(By.name("test1"));
+     */
+
+    public boolean isThereAnyContact() {
+        return isElementPresent(By.name("selected[]"));
     }
 }
 

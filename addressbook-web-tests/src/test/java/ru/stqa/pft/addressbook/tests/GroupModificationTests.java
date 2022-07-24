@@ -10,7 +10,7 @@ public class GroupModificationTests extends TestBase{
     @Test
     public void testGroupModification() {
         app.getNavigationHelper().gotoGroupPage();
-        //проверка налияия хоть одной группы; если нет - создать
+        //проверка наличия хоть одной группы; если нет - создать
         if (! app.getGroupHelper().isThereAGroup()) {
             app.getGroupHelper().createGroup(new GroupData("test1", "test2", "test3"));
         }

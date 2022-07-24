@@ -8,7 +8,7 @@ public class ContactDeletionTests extends TestBase {
     public void testContactDeletion() {
         app.getNavigationHelper().goToHomePage();
         //проверка наличия контакта для удаления: если нечего удалять, то создать контакт
-        if (! app.getContactHelper().isThereAGroup()) {
+        if (! app.getContactHelper().isThereAnyContact()) {
             app.getContactHelper().createContact(new ContactData("Den", "Kh.", "Suvorova st.",
                     "den@mail.ru", "+79188888777", "test1"));
         }
