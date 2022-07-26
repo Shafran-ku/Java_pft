@@ -76,7 +76,8 @@ public class GroupHelper extends HelperBase {
             String name = element.getText();
 
             //получаем идентификатор группы из элемента "span.group"
-            String id = element.findElement(By.tagName("input")).getAttribute("value");
+            //Integer.parseInt() - преобразования типа данных в int
+            int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
             GroupData group = new GroupData(id, name, null, null);
 
             //добавляем созданный объект в список
