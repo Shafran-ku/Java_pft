@@ -1,7 +1,7 @@
 package ru.stqa.pft.addressbook.tests;
 
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class GroupCreationTests extends TestBase {
         //будет содержать список элементов после до того как будет создана группа
         List<GroupData> before = app.getGroupHelper().getGroupList();
 
-        GroupData group = new GroupData("test1", null, null);
+        GroupData group = new GroupData("test2", null, null);
         app.getGroupHelper().createGroup(group);
 
         //будет содержать список элементов после того как будет создана группа
@@ -26,13 +26,10 @@ public class GroupCreationTests extends TestBase {
 
 
         //среди всех элементов списка найти максимальный идентификатор(будет у последней добавленной группы)
-        int max = 0;
-        for (GroupData g: after) {
-            if (g.getId() > max) {
-                max = g.getId();
-            }
-        }
-        group.setId(max);
+        //компаратор - это интерфейс, объявляет методы. которые должны быть
+        //список превращаем в поток, по этому потоку проходит ф-я-сравниватель и находит макс-ый элемент,
+        //при этом сравниваются объекты типа GroupData путем сравнивания их идент-ра
+        group.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
         before.add(group);
         Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after));
 
