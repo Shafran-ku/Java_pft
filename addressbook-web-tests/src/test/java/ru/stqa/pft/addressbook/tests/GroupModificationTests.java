@@ -16,9 +16,11 @@ public class GroupModificationTests extends TestBase{
         if (! app.getGroupHelper().isThereAGroup()) {
             app.getGroupHelper().createGroup(new GroupData("test1", null, null)); //было "test1", "test2", "test3"
         }
-        //будет содержать список элементов после до того как будет создана группа
+        //будет содержать список элементов после того как будет создана группа
         List<GroupData> before = app.getGroupHelper().getGroupList();
         app.getGroupHelper().selectGroup(before.size() -1);
+
+        //модификация группы
         app.getGroupHelper().initGroupModification();
 
         //сделали переменную, чтобы не писать одно и то же
