@@ -1,5 +1,7 @@
 package ru.stqa.pft.addressbook.model;
 
+import java.util.Objects;
+
 public class ContactData {
     private final String firstname;
     private final String lastname;
@@ -15,6 +17,29 @@ public class ContactData {
         this.email = email;
         this.homephone = homephone;
         this.group = group;
+    }
+
+    //code → generate → to string: чтобы можно было видеть содержимое элементов списка при сравнении
+    @Override
+    public String toString() {
+        return "ContactData{" +
+                "firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                '}';
+    }
+
+    //code → generate → equals & hashcode: при сравнении объектов будет сравнивать их атрибуты
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContactData that = (ContactData) o;
+        return Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstname, lastname);
     }
 
     public String getFirstname() {

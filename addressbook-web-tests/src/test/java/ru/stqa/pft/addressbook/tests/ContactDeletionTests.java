@@ -28,5 +28,13 @@ public class ContactDeletionTests extends TestBase {
 
         //сравнение кол-ва контактов до добавления и после
         Assert.assertEquals(after.size(), before.size() - 1);
+
+        
+        //удаляем ненужный элемент из списка для сравнения
+        before.remove(before.size() - 1);
+
+        //сравниваем 2 списка
+        Assert.assertEquals(before, after);
+        }
     }
-}
+
