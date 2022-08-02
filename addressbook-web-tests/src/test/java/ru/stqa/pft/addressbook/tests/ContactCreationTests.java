@@ -5,11 +5,14 @@ import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.util.List;
+
 public class ContactCreationTests extends TestBase {
     @Test
     public void testContactCreation() throws Exception {
-        //кол-во контактов до добавления
-        int before = app.getContactHelper().getContactCount();
+
+        //список элементов до добавления
+        List<ContactData> before = app.getContactHelper().getContactList();
 
         app.getNavigationHelper().gotoGroupPage();
         //проверка наличия хоть одной группы при создании контакта, если ни одной группы нет, то создать
@@ -20,10 +23,11 @@ public class ContactCreationTests extends TestBase {
         app.getContactHelper().createContact(new ContactData("Den", "Kh.", "Suvorova st.",
                 "den@mail.ru", "+79188888777", "test1"));
 
-        //кол-во контактов после добавления
-        int after = app.getContactHelper().getContactCount();
-        //сравнение кол-ва контактов до добавления и после
-        Assert.assertEquals(after, before + 1);
+        //список элементов после того как будет создана новая группа
+        List<ContactData> after = app.getContactHelper().getContactList();
+
+        //сравнение размера списков до и после добавления
+        Assert.assertEquals(after.size(), before.size() + 1);
     }
 
 }
