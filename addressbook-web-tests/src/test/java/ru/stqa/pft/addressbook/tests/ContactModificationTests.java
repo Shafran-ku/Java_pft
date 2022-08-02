@@ -21,7 +21,7 @@ public class ContactModificationTests extends TestBase {
                     "den@mail.ru", "+79188888777", "test1"));
         }
 
-        //список элементов до добавления
+        //список элементов до модификации
         List<ContactData> before = app.getContactHelper().getContactList();
 
         app.getContactHelper().selectAndInitContactModification(before.size() - 1);
@@ -30,7 +30,7 @@ public class ContactModificationTests extends TestBase {
         app.getContactHelper().submitContactCreation();
         app.getNavigationHelper().goToHomePage();
 
-        //список элементов после того как будет создана новая группа
+        //список элементов после того как будет модификация
         List<ContactData> after = app.getContactHelper().getContactList();
 
 

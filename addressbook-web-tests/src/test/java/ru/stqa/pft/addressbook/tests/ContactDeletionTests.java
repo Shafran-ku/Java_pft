@@ -16,14 +16,14 @@ public class ContactDeletionTests extends TestBase {
             app.getContactHelper().createContact(new ContactData("Den", "Kh.", "Suvorova st.",
                     "den@mail.ru", "+79188888777", "test1"));
         }
-        //список элементов до добавления
+        //список элементов до удаления
         List<ContactData> before = app.getContactHelper().getContactList();
 
         app.getContactHelper().selectAndInitContactModification(before.size() - 1);
         app.getContactHelper().deleteSelectedContact();
         app.getNavigationHelper().goToHomePage();
 
-        //список элементов после того как будет создана новая группа
+        //список элементов после удаления контакта
         List<ContactData> after = app.getContactHelper().getContactList();
 
         //сравнение кол-ва контактов до добавления и после
