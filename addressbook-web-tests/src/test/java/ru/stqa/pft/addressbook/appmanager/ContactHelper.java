@@ -100,13 +100,18 @@ public class ContactHelper extends HelperBase {
         //пройти в цикле по элементам (строкам таблицы)
         for (WebElement element : elements) {
             //и из каждого получить text:  имя + фамилия контакта
-            String name = element.getText();
-            ContactData contact = new ContactData(name, name, null, null, null, null);
+            //String name = element.getText();
+            List<WebElement> cells = element.findElements(By.tagName("td"));
+            ContactData contact = new ContactData(cells.get(2).getText(), cells.get(1).getText(), null, null, null, null);
 
             //добавляем созданный объект в contact
             contacts.add(contact);
         }
         return contacts;
+    }
+
+    public void submitContactModification() {
+        click(By.name("update"));
     }
 }
 

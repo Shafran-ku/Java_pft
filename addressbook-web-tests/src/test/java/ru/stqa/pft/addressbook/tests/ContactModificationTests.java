@@ -27,15 +27,16 @@ public class ContactModificationTests extends TestBase {
         //список элементов до модификации
         List<ContactData> before = app.getContactHelper().getContactList();
 
+        //выбираем последний элемент в списке контактов для модификации
         app.getContactHelper().selectAndInitContactModification(before.size() - 1);
         app.getContactHelper().fillContactForm(new ContactData("Den", "Kh.", "Suvorova st.",
                 "den@mail.ru", "+79188888777", null), false);
-        app.getContactHelper().submitContactCreation();
+        app.getContactHelper().submitContactModification();
+        //app.getContactHelper().submitContactCreation();
         app.getNavigationHelper().goToHomePage();
 
         //список элементов после того как будет модификация
         List<ContactData> after = app.getContactHelper().getContactList();
-
 
         //сравнение кол-ва контактов до добавления и после
         Assert.assertEquals(after.size(), before.size());
