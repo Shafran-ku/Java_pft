@@ -33,14 +33,10 @@ public class ContactCreationTests extends TestBase {
         //сравнение размера списков до и после добавления
         Assert.assertEquals(after.size(), before.size() + 1);
 
-        //ищем добавленный контакт (у него будет максимальный id)
-        int max = 0;
-        for (ContactData c : after) {
-            if (c.getId() > max) {
-                max = c.getId();
-            }
-        }
-        contact.setId(max);
+        //ищем добавленный контакт (у него будет максимальный id) с помощью анонимной ф-ии, которая сраванивает 2 объекта:
+        //список превращаем в поток, по этому потоку проходит ф-ция-сравниватель и находит макс.элемент,
+        // при этом сравниваются объекты типа ContactData путем сравнения их идентификаторов
+        contact.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
         before.add(contact);
         Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after));
     }
