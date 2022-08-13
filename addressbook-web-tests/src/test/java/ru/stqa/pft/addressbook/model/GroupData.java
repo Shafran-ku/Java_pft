@@ -9,8 +9,6 @@ public class GroupData {
     private final String header;
     private final String footer;
 
-
-
     //группа с неизвестным идентификатором
     // Конструктор который не принимает идентификатор группы id в качестве параметра,
     //если вызывается этот конструктор то присваивается id = null
@@ -58,6 +56,7 @@ public class GroupData {
                 '}';
     }
 
+    //сгенерировали метод equals для того чтобы уметь сравнивать объекты типа GroupData
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

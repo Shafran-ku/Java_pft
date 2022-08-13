@@ -53,6 +53,7 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
+    //находим все элементы по локатору и среди всех выбираем нужный по индексу, и делаем клик
     public void selectAndInitContactModification(int index) {
         wd.findElements(By.xpath("//img[@alt='Edit']")).get(index).click();
         //click(By.xpath("//img[@alt='Edit']"));

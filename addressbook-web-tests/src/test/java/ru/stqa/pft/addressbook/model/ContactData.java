@@ -28,7 +28,8 @@ public class ContactData {
                 '}';
     }
 
-    //code → generate → equals & hashcode: при сравнении объектов будет сравнивать их атрибуты
+    //code → generate → equals & hashcode: сгенерировали метод equals для того чтобы уметь сравнивать объекты типа ContactData
+    // (при сравнении объектов сравниваются их атрибуты)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

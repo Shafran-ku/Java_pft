@@ -12,11 +12,14 @@ public class ContactModificationTests extends TestBase {
     public void testContactModification() {
         app.getNavigationHelper().goToHomePage();
 
+        //проверка есть ли контакт, если нет то проверка наличия группы
         if (!app.getContactHelper().isThereAnyContact()) {
             app.getNavigationHelper().gotoGroupPage();
+            //проверка есть ли хоть одна группа, если нет - создаем
             if (!app.getGroupHelper().isAnyGroupExist()) {
                 app.getGroupHelper().createGroup(new GroupData("test1", null, null));
             }
+            //если нет контакта, но есть группа, создаем контакт
             app.getContactHelper().createContact(new ContactData("Den", "Kh.", "Suvorova st.",
                     "den@mail.ru", "+79188888777", "test1"));
         }
