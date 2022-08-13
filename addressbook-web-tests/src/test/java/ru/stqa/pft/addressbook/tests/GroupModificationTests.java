@@ -24,7 +24,7 @@ public class GroupModificationTests extends TestBase{
         app.getGroupHelper().initGroupModification();
 
         //сделали переменную, чтобы не писать одно и то же
-        //при модификации группы указываем имя, новые header, новый footer, а идентификатор сохраняем старый
+        //при модификации группы указываем новое имя, новые header, новый footer, а идентификатор сохраняем старый
         GroupData group = new GroupData(before.get(before.size() -1).getId(), "test1", "test2", "test3");  //было "test1", null, null
 
         app.getGroupHelper().fillGroupForm(group);

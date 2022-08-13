@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class ContactModificationTests extends TestBase {
@@ -29,8 +30,13 @@ public class ContactModificationTests extends TestBase {
 
         //выбираем последний элемент в списке контактов для модификации
         app.getContactHelper().selectAndInitContactModification(before.size() - 1);
-        app.getContactHelper().fillContactForm(new ContactData("Den", "Kh.", "Suvorova st.",
-                "den@mail.ru", "+79188888777", null), false);
+
+        //сделали переменную, чтобы не писать одно и то же
+        //при модификации контакта указываем новые данные, а идентификатор сохраняем старый (before.get(before.size() - 1).getId())
+        ContactData contact =  new ContactData(before.get(before.size() - 1).getId(),"Den", "Kh.", "Suvorova st.",
+                "den@mail.ru", "+79188888777", null);
+
+        app.getContactHelper().fillContactForm(contact, false);
         app.getContactHelper().submitContactModification();
         //app.getContactHelper().submitContactCreation();
         app.getNavigationHelper().goToHomePage();
@@ -40,6 +46,12 @@ public class ContactModificationTests extends TestBase {
 
         //сравнение кол-ва контактов до добавления и после
         Assert.assertEquals(after.size(), before.size());
+
+        //модифицируем старый список - удалим из списка элемент, который ранее удаляли
+        before.remove(before.size() - 1);
+        //а вместо удаленного добавим элемент, который должен появиться после модификации
+        before.add(contact);
+        Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after));
     }
 
 }
