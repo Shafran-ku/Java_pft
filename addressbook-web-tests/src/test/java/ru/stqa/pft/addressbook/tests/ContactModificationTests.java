@@ -5,6 +5,8 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -51,7 +53,17 @@ public class ContactModificationTests extends TestBase {
         before.remove(before.size() - 1);
         //а вместо удаленного добавим элемент, который должен появиться после модификации
         before.add(contact);
-        Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after));
+
+        //сортируем списки до и после, затем сравниваем:
+
+        //локальная переменная + лямбда  выражение(анонимая ф-я, на вход принимает 2 сравниваемых контакта, и выполняет сравнение их идент-ов
+        Comparator<? super ContactData> byId = (c1, c2) -> Integer.compare((c1.getId()), c2.getId());
+        //сортируем первый список
+        before.sort(byId);
+        //сортируем второй список
+        after.sort(byId);
+
+        Assert.assertEquals(before, after);
     }
 
 }

@@ -5,6 +5,7 @@ import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -33,12 +34,18 @@ public class ContactCreationTests extends TestBase {
         //сравнение размера списков до и после добавления
         Assert.assertEquals(after.size(), before.size() + 1);
 
-        //ищем добавленный контакт (у него будет максимальный id) с помощью анонимной ф-ии, которая сраванивает 2 объекта:
-        //список превращаем в поток, по этому потоку проходит ф-ция-сравниватель и находит макс.элемент,
-        // при этом сравниваются объекты типа ContactData путем сравнения их идентификаторов
-        contact.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
         before.add(contact);
-        Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after));
+
+        //локальная переменная + лямбда  выражение(анонимая ф-я, на вход принимает 2 сравниваемых контакта, и выполняет сравнение их идент-ов
+        Comparator<? super ContactData> byId = (c1, c2) -> Integer.compare((c1.getId()), c2.getId());
+
+        //сортируем старый список
+        before.sort(byId);
+        //сортируем новый список
+        after.sort(byId);
+
+        //сравниваем упорядоченные списки (контакты сравниваеются по firstname и lastname, id не учитываются
+        Assert.assertEquals(before, after);
     }
 
 }
