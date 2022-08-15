@@ -11,7 +11,7 @@ public class ContactDeletionTests extends TestBase {
     //предусловия теста
     @BeforeMethod
     public void ensurePreconditions() {
-        app.getNavigationHelper().goToHomePage();
+        app.goTo().goToHomePage();
 
         //проверка наличия контакта для удаления: если нечего удалять, то создать контакт
         if (! app.getContactHelper().isThereAnyContact()) {
@@ -28,7 +28,7 @@ public class ContactDeletionTests extends TestBase {
 
         app.getContactHelper().selectAndInitContactModification(before.size() - 1);
         app.getContactHelper().deleteSelectedContact();
-        app.getNavigationHelper().goToHomePage();
+        app.goTo().goToHomePage();
 
         //список элементов после удаления контакта
         List<ContactData> after = app.getContactHelper().getContactList();

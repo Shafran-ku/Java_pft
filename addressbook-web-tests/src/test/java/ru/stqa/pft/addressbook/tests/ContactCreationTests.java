@@ -6,19 +6,18 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 public class ContactCreationTests extends TestBase {
     //предусловия теста
     @BeforeMethod
     public void ensurePreconditions() {
-        app.getNavigationHelper().gotoGroupPage();
+        app.goTo().groupPage();
         //проверка наличия хоть одной группы при создании контакта, если ни одной группы нет, то создать
-        if (! app.getGroupHelper().isAnyGroupExist()) {
-            app.getGroupHelper().createGroup(new GroupData("test1", null, null));
+        if (! app.group().isAnyGroupExist()) {
+            app.group().create(new GroupData("test1", null, null));
         }
-        app.getNavigationHelper().goToHomePage();
+        app.goTo().goToHomePage();
     }
 
     @Test

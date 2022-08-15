@@ -6,23 +6,21 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 public class ContactModificationTests extends TestBase {
    //предусловия теста
     @BeforeMethod
     public void ensurePreconditions() {
-        app.getNavigationHelper().goToHomePage();
+        app.goTo().goToHomePage();
 
         //проверка есть ли контакт, если нет то проверка наличия группы
         if (!app.getContactHelper().isThereAnyContact()) {
-            app.getNavigationHelper().gotoGroupPage();
+            app.goTo().groupPage();
             //проверка есть ли хоть одна группа, если нет - создаем
-            if (!app.getGroupHelper().isAnyGroupExist()) {
-                app.getGroupHelper().createGroup(new GroupData("test1", null, null));
+            if (!app.group().isAnyGroupExist()) {
+                app.group().create(new GroupData("test1", null, null));
             }
             //если нет контакта, но есть группа, создаем контакт
             app.getContactHelper().createContact(new ContactData("Den", "Kh.", "Suvorova st.",
@@ -49,7 +47,7 @@ public class ContactModificationTests extends TestBase {
         app.getContactHelper().fillContactForm(contact, false);
         app.getContactHelper().submitContactModification();
         //app.getContactHelper().submitContactCreation();
-        app.getNavigationHelper().goToHomePage();
+        app.goTo().goToHomePage();
 
         //список элементов после того как будет модификация
         List<ContactData> after = app.getContactHelper().getContactList();

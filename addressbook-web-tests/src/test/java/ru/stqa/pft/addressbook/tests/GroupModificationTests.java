@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 public class GroupModificationTests extends TestBase{
@@ -14,10 +13,10 @@ public class GroupModificationTests extends TestBase{
     //выполнение предусловия
     @BeforeMethod
     public void ensurePreconditions() {
-        app.getNavigationHelper().gotoGroupPage();
+        app.goTo().groupPage();
         //проверка наличия хоть одной группы; если нет - создать
-        if (! app.getGroupHelper().isThereAGroup()) {
-            app.getGroupHelper().createGroup(new GroupData("test1", null, null)); //было "test1", "test2", "test3"
+        if (app.group().list().size() == 0) {
+            app.group().create(new GroupData("test1", null, null)); //было "test1", "test2", "test3"
         }
     }
 
@@ -25,7 +24,7 @@ public class GroupModificationTests extends TestBase{
     public void testGroupModification() {
 
         //будет содержать список элементов после того как будет создана группа
-        List<GroupData> before = app.getGroupHelper().getGroupList();
+        List<GroupData> before = app.group().list();
 
         //index - группа, которую мы собираемся модифицировать
         int index = before.size() -1;
@@ -33,10 +32,10 @@ public class GroupModificationTests extends TestBase{
         //при модификации группы указываем новое имя, новые header, новый footer, а идентификатор сохраняем старый
         GroupData group = new GroupData(before.get(index).getId(), "test1", "test2", "test3");
         //модификация группы
-        app.getGroupHelper().modifyGroup(index, group);
+        app.group().modify(index, group);
 
         //будет содержать список элементов после того как будет создана группа
-        List<GroupData> after = app.getGroupHelper().getGroupList();
+        List<GroupData> after = app.group().list();
 
         //сравниваем размеры списков
         Assert.assertEquals(after.size(), before.size());
