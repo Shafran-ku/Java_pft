@@ -10,18 +10,22 @@ import java.util.HashSet;
 import java.util.List;
 
 public class ContactCreationTests extends TestBase {
-    @Test(enabled = false)
-    public void testContactCreation() throws Exception {
-
-        //список элементов до добавления
-        List<ContactData> before = app.getContactHelper().getContactList();
-
+    //предусловия теста
+    @BeforeMethod
+    public void ensurePreconditions() {
         app.getNavigationHelper().gotoGroupPage();
         //проверка наличия хоть одной группы при создании контакта, если ни одной группы нет, то создать
         if (! app.getGroupHelper().isAnyGroupExist()) {
             app.getGroupHelper().createGroup(new GroupData("test1", null, null));
         }
         app.getNavigationHelper().goToHomePage();
+    }
+
+    @Test
+    public void testContactCreation() throws Exception {
+
+        //список элементов до добавления
+        List<ContactData> before = app.getContactHelper().getContactList();
 
         //сделали переменную
         ContactData contact = new ContactData("Den", "Kh.", "Suvorova st.",

@@ -1,6 +1,7 @@
 package ru.stqa.pft.addressbook.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
@@ -11,8 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 
 public class ContactModificationTests extends TestBase {
-    @Test(enabled = false)
-    public void testContactModification() {
+   //предусловия теста
+    @BeforeMethod
+    public void ensurePreconditions() {
         app.getNavigationHelper().goToHomePage();
 
         //проверка есть ли контакт, если нет то проверка наличия группы
@@ -26,17 +28,23 @@ public class ContactModificationTests extends TestBase {
             app.getContactHelper().createContact(new ContactData("Den", "Kh.", "Suvorova st.",
                     "den@mail.ru", "+79188888777", "test1"));
         }
+    }
+
+    @Test
+    public void testContactModification() {
 
         //список элементов до модификации
         List<ContactData> before = app.getContactHelper().getContactList();
 
-        //выбираем последний элемент в списке контактов для модификации
-        app.getContactHelper().selectAndInitContactModification(before.size() - 1);
+        //индекс контакта, который мы модифицируем
+        int index = before.size() - 1;
 
-        //сделали переменную, чтобы не писать одно и то же
         //при модификации контакта указываем новые данные, а идентификатор сохраняем старый (before.get(before.size() - 1).getId())
-        ContactData contact =  new ContactData(before.get(before.size() - 1).getId(),"Den", "Kh.", "Suvorova st.",
+        ContactData contact =  new ContactData(before.get(index).getId(),"Den", "Kh.", "Suvorova st.",
                 "den@mail.ru", "+79188888777", null);
+
+        //выбираем последний элемент в списке контактов для модификации
+        app.getContactHelper().selectAndInitContactModification(index);
 
         app.getContactHelper().fillContactForm(contact, false);
         app.getContactHelper().submitContactModification();
@@ -50,7 +58,7 @@ public class ContactModificationTests extends TestBase {
         Assert.assertEquals(after.size(), before.size());
 
         //модифицируем старый список - удалим из списка элемент, который ранее удаляли
-        before.remove(before.size() - 1);
+        before.remove(index);
         //а вместо удаленного добавим элемент, который должен появиться после модификации
         before.add(contact);
 
