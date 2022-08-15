@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class ContactModificationTests extends TestBase {
-    @Test
+    @Test(enabled = false)
     public void testContactModification() {
         app.getNavigationHelper().goToHomePage();
 

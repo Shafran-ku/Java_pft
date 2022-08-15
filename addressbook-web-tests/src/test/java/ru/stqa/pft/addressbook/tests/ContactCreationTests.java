@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class ContactCreationTests extends TestBase {
-    @Test
+    @Test(enabled = false)
     public void testContactCreation() throws Exception {
 
         //список элементов до добавления
