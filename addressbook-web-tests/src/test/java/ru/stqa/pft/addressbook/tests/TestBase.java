@@ -11,7 +11,7 @@ public class TestBase {
 
     protected static ApplicationManager app = new ApplicationManager(BrowserType.CHROME);    //выбор нужного браузера IE CHROME FIREFOX
 
-    @BeforeSuite //Suite может состоять из нескольких тестов
+    @BeforeSuite //глобальная инициализация. (Suite может состоять из нескольких тестов)
     public void setUp() throws Exception {
         app.init();
     }
