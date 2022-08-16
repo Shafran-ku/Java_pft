@@ -94,10 +94,9 @@ public class GroupHelper extends HelperBase {
             //получаем идентификатор группы из элемента "span.group"
             //Integer.parseInt() - преобразования типа данных в int
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
-            GroupData group = new GroupData(id, name, null, null);
 
             //добавляем созданный объект в список
-            groups.add(group);
+            groups.add(new GroupData().withId(id).withName(name));
         }
         return groups;
     }

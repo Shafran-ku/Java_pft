@@ -12,8 +12,6 @@ public class ContactData {
     private String group;
 
 
-
-
     // Конструктор который не принимает идентификатор id контакта в качестве параметра,
     // если вызывается этот констр-р то присваивается null в ккачестве id (контакт с неизвестным id, т.е. созданный вручную, а не считанный)
     public ContactData(String firstname, String lastname, String address, String email, String homephone, String group) {

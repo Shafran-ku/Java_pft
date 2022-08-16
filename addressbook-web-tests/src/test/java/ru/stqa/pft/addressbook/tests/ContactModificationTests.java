@@ -20,7 +20,7 @@ public class ContactModificationTests extends TestBase {
             app.goTo().groupPage();
             //проверка есть ли хоть одна группа, если нет - создаем
             if (!app.group().isAnyGroupExist()) {
-                app.group().create(new GroupData("test1", null, null));
+                app.group().create(new GroupData().withName("test1"));
             }
             //если нет контакта, но есть группа, создаем контакт
             app.contact().create(new ContactData("Den", "Kh.", "Suvorova st.",
