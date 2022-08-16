@@ -65,11 +65,16 @@ public class ContactHelper extends HelperBase {
 
     }
 
-    public void createContact(ContactData contact) {
+    public void create(ContactData contact) {
         initContactCreation();
         fillContactForm(contact, true);
         submitContactCreation();
         returnToHomePage();
+    }
+
+    public void delete(int index) {
+        selectAndInitContactModification(index);
+        deleteSelectedContact();
     }
 
     /*
@@ -90,7 +95,7 @@ public class ContactHelper extends HelperBase {
         //Selected[]    entry
     }
 
-    public List<ContactData> getContactList() {
+    public List<ContactData> list() {
         //список который будем заполнять
         List<ContactData> contacts = new ArrayList<ContactData>();
 

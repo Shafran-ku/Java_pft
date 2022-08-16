@@ -13,17 +13,17 @@ public class ContactModificationTests extends TestBase {
    //предусловия теста
     @BeforeMethod
     public void ensurePreconditions() {
-        app.goTo().goToHomePage();
+        app.goTo().HomePage();
 
         //проверка есть ли контакт, если нет то проверка наличия группы
-        if (!app.getContactHelper().isThereAnyContact()) {
+        if (app.contact().list().size() == 0) {
             app.goTo().groupPage();
             //проверка есть ли хоть одна группа, если нет - создаем
             if (!app.group().isAnyGroupExist()) {
                 app.group().create(new GroupData("test1", null, null));
             }
             //если нет контакта, но есть группа, создаем контакт
-            app.getContactHelper().createContact(new ContactData("Den", "Kh.", "Suvorova st.",
+            app.contact().create(new ContactData("Den", "Kh.", "Suvorova st.",
                     "den@mail.ru", "+79188888777", "test1"));
         }
     }
@@ -32,7 +32,7 @@ public class ContactModificationTests extends TestBase {
     public void testContactModification() {
 
         //список элементов до модификации
-        List<ContactData> before = app.getContactHelper().getContactList();
+        List<ContactData> before = app.contact().list();
 
         //индекс контакта, который мы модифицируем
         int index = before.size() - 1;
@@ -42,15 +42,15 @@ public class ContactModificationTests extends TestBase {
                 "den@mail.ru", "+79188888777", null);
 
         //выбираем последний элемент в списке контактов для модификации
-        app.getContactHelper().selectAndInitContactModification(index);
+        app.contact().selectAndInitContactModification(index);
 
-        app.getContactHelper().fillContactForm(contact, false);
-        app.getContactHelper().submitContactModification();
+        app.contact().fillContactForm(contact, false);
+        app.contact().submitContactModification();
         //app.getContactHelper().submitContactCreation();
-        app.goTo().goToHomePage();
+        app.goTo().HomePage();
 
         //список элементов после того как будет модификация
-        List<ContactData> after = app.getContactHelper().getContactList();
+        List<ContactData> after = app.contact().list();
 
         //сравнение кол-ва контактов до добавления и после
         Assert.assertEquals(after.size(), before.size());

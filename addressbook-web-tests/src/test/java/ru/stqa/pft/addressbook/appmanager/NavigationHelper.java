@@ -17,7 +17,7 @@ public class NavigationHelper extends HelperBase {
         click(By.linkText("groups"));
     }
 
-    public void goToHomePage() {
+    public void HomePage() {
         if (isElementPresent(By.id("mainntable"))) {
             return;
         }

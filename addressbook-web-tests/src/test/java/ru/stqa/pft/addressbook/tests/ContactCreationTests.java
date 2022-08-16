@@ -17,22 +17,22 @@ public class ContactCreationTests extends TestBase {
         if (! app.group().isAnyGroupExist()) {
             app.group().create(new GroupData("test1", null, null));
         }
-        app.goTo().goToHomePage();
+        app.goTo().HomePage();
     }
 
     @Test
     public void testContactCreation() throws Exception {
 
         //список элементов до добавления
-        List<ContactData> before = app.getContactHelper().getContactList();
+        List<ContactData> before = app.contact().list();
 
         //сделали переменную
         ContactData contact = new ContactData("Den", "Kh.", "Suvorova st.",
                 "den@mail.ru", "+79188888777", "test1");
-        app.getContactHelper().createContact(contact);
+        app.contact().create(contact);
 
         //список элементов после того как будет создана новая группа
-        List<ContactData> after = app.getContactHelper().getContactList();
+        List<ContactData> after = app.contact().list();
 
         //сравнение размера списков до и после добавления
         Assert.assertEquals(after.size(), before.size() + 1);

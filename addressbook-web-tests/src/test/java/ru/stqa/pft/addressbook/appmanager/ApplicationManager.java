@@ -37,7 +37,6 @@ public class ApplicationManager {
         sessionHelper.login("admin", "secret");
     }
 
-
     public void stop() {
         contactHelper.wd.quit();
     }
@@ -50,7 +49,7 @@ public class ApplicationManager {
         return navigationHelper;
     }
 
-    public ContactHelper getContactHelper() {
+    public ContactHelper contact() {
         return contactHelper;
     }
 }
