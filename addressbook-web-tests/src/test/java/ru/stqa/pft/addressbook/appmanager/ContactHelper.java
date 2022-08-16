@@ -111,10 +111,10 @@ public class ContactHelper extends HelperBase {
             //получаем идентификатор для каждого контакта(поиск элемента "id" по тегу "input" внутри элемента "entry");
             //Integer.parseInt() - преобразования типа данных в int
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("id"));
-            ContactData contact = new ContactData(id, cells.get(2).getText(), cells.get(1).getText(), null, null, null, null);
 
             //добавляем созданный объект в contact
-            contacts.add(contact);
+            contacts.add(new ContactData().withId(id).withFirstname(cells.get(2).getText())
+                    .withLastname(cells.get(1).getText()));
         }
         return contacts;
     }

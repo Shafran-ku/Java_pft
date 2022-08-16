@@ -27,8 +27,8 @@ public class ContactCreationTests extends TestBase {
         List<ContactData> before = app.contact().list();
 
         //сделали переменную
-        ContactData contact = new ContactData("Den", "Kh.", "Suvorova st.",
-                "den@mail.ru", "+79188888777", "test1");
+        ContactData contact = new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
+                .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1");
         app.contact().create(contact);
 
         //список элементов после того как будет создана новая группа

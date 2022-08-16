@@ -15,8 +15,8 @@ public class ContactDeletionTests extends TestBase {
 
         //проверка наличия контакта для удаления: если нечего удалять, то создать контакт
         if (app.contact().list().size() == 0)  {
-            app.contact().create(new ContactData("Den", "Kh.", "Suvorova st.",
-                    "den@mail.ru", "+79188888777", "test1"));
+            app.contact().create(new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
+                    .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1"));
         }
     }
 

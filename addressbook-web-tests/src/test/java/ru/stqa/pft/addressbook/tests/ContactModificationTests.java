@@ -19,12 +19,12 @@ public class ContactModificationTests extends TestBase {
         if (app.contact().list().size() == 0) {
             app.goTo().groupPage();
             //проверка есть ли хоть одна группа, если нет - создаем
-            if (!app.group().isAnyGroupExist()) {
+            if (app.group().list().size() == 0) {
                 app.group().create(new GroupData().withName("test1"));
             }
             //если нет контакта, но есть группа, создаем контакт
-            app.contact().create(new ContactData("Den", "Kh.", "Suvorova st.",
-                    "den@mail.ru", "+79188888777", "test1"));
+            app.contact().create(new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
+                    .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1"));
         }
     }
 
@@ -38,8 +38,8 @@ public class ContactModificationTests extends TestBase {
         int index = before.size() - 1;
 
         //при модификации контакта указываем новые данные, а идентификатор сохраняем старый (before.get(before.size() - 1).getId())
-        ContactData contact =  new ContactData(before.get(index).getId(),"Den", "Kh.", "Suvorova st.",
-                "den@mail.ru", "+79188888777", null);
+        ContactData contact =  new ContactData().withId(before.get(index).getId()).withFirstname("Den")
+                .withLastname("Kh.").withAddress("Suvorova st.").withEmail("den@mail.ru").withHomephone("+79188888777");
 
         //выбираем последний элемент в списке контактов для модификации
         app.contact().selectAndInitContactModification(index);

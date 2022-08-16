@@ -3,38 +3,13 @@ package ru.stqa.pft.addressbook.model;
 import java.util.Objects;
 
 public class ContactData {
-    private int id;
-    private final String firstname;
-    private final String lastname;
-    private final String address;
-    private final String email;
-    private final String homephone;
+    private int id = Integer.MAX_VALUE;
+    private String firstname;
+    private String lastname;
+    private String address;
+    private String email;
+    private String homephone;
     private String group;
-
-
-    // Конструктор который не принимает идентификатор id контакта в качестве параметра,
-    // если вызывается этот констр-р то присваивается null в ккачестве id (контакт с неизвестным id, т.е. созданный вручную, а не считанный)
-    public ContactData(String firstname, String lastname, String address, String email, String homephone, String group) {
-        this.id = Integer.MAX_VALUE;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.address = address;
-        this.email = email;
-        this.homephone = homephone;
-        this.group = group;
-    }
-
-    // Конструктор который принимает идентификатор id контакта в качестве параметра
-    public ContactData(int id, String firstname, String lastname, String address, String email, String homephone, String group) {
-        this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.address = address;
-        this.email = email;
-        this.homephone = homephone;
-        this.group = group;
-    }
-
 
     public String getFirstname() {
         return firstname;
@@ -60,9 +35,41 @@ public class ContactData {
         return group;
     }
 
-    public void setId(int id) {
+    public ContactData withId(int id) {
         this.id = id;
+        return this;
     }
+
+    public ContactData withFirstname(String firstname) {
+        this.firstname = firstname;
+        return this;
+    }
+
+    public ContactData withLastname(String lastname) {
+        this.lastname = lastname;
+        return this;
+    }
+
+    public ContactData withAddress(String address) {
+        this.address = address;
+        return this;
+    }
+
+    public ContactData withEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public ContactData withHomephone(String homephone) {
+        this.homephone = homephone;
+        return this;
+    }
+
+    public ContactData withGroup(String group) {
+        this.group = group;
+        return this;
+    }
+
 
     public int getId() {
         return id;
