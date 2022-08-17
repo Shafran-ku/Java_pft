@@ -38,12 +38,10 @@ public class GroupHelper extends HelperBase {
         click(By.name("delete"));
     }
 
-    //передаем в качестве параметра индекс элемента
-    public void selectGroup(int index) {
+    public void selectGroupById(int id) {
         //находим все элементы по локатору и среди всех выбираем нужный по индексу, и делаем клик
-        wd.findElements(By.name("selected[]")).get(index).click();
+        wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
     }
-
     public void initGroupModification() {
         click(By.name("edit"));
     }
@@ -60,17 +58,16 @@ public class GroupHelper extends HelperBase {
     }
 
     //модификация группы
-    public void modify(int index, GroupData group) {
-        selectGroup(index);
+    public void modify(GroupData group) {
+        selectGroupById(group.getId());
         initGroupModification();
         fillGroupForm(group);
         submitGroupModification();
         returnToGroupPage();
     }
 
-    //удаление групп
-    public void delete(int index) {
-        selectGroup(index);
+    public void delete(GroupData group) {
+        selectGroupById(group.getId());
         deleteSelectedGroups();
         returnToGroupPage();
     }
@@ -127,4 +124,5 @@ public class GroupHelper extends HelperBase {
     public boolean isAnyGroupExist() {
         return isElementPresent(By.name("selected[]"));
     }
+
 }

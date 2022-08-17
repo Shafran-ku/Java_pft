@@ -7,6 +7,7 @@ import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 public class GroupModificationTests extends TestBase{
 
@@ -15,7 +16,7 @@ public class GroupModificationTests extends TestBase{
     public void ensurePreconditions() {
         app.goTo().groupPage();
         //проверка наличия хоть одной группы; если нет - создать
-        if (app.group().list().size() == 0) {
+        if (app.group().all().size() == 0) {
             app.group().create(new GroupData().withName("test1"));
         }
     }
@@ -23,36 +24,25 @@ public class GroupModificationTests extends TestBase{
     @Test
     public void testGroupModification() {
 
-        //будет содержать список элементов после того как будет создана группа
-        List<GroupData> before = app.group().list();
-
-        //index - группа, которую мы собираемся модифицировать
-        int index = before.size() -1;
+        //будет содержать множество элементов после того как будет создана группа
+        Set<GroupData> before = app.group().all();
+        GroupData modifiedGroup = before.iterator().next();
 
         //при модификации группы указываем новое имя, новые header, новый footer, а идентификатор сохраняем старый
         GroupData group = new GroupData()
-                .withId(before.get(index).getId()).withName("test1").withHeader("test2").withFooter("test3");
+                .withId(modifiedGroup.getId()).withName("test1").withHeader("test2").withFooter("test3");
         //модификация группы
-        app.group().modify(index, group);
+        app.group().modify(group);
 
         //будет содержать список элементов после того как будет создана группа
-        List<GroupData> after = app.group().list();
+        Set<GroupData> after = app.group().all();
 
         //сравниваем размеры списков
         Assert.assertEquals(after.size(), before.size());
 
         //модифицируем старый список - удаляем предыдущий, добавляем последний
-        before.remove(index);
+        before.remove(modifiedGroup);
         before.add(group);
-
-        //локальная переменная + лямбда  выражение(анонимая ф-я, на вход принимает 2 сравниваемых группы, и выполняет сравнение идент-ов
-        Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-
-        //передаем переменную byId, сортируем первый список
-        before.sort(byId);
-
-        //сортируем второй список
-        after.sort(byId);
 
         //сравниваем отсортированные списки
         Assert.assertEquals(before, after);
