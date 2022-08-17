@@ -6,6 +6,7 @@ import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 public class GroupCreationTests extends TestBase {
 
@@ -13,28 +14,21 @@ public class GroupCreationTests extends TestBase {
     public void testGroupCreation() throws Exception {
         app.goTo().groupPage();
 
-        //будет содержать список элементов до того как будет создана группа
-        List<GroupData> before = app.group().list();
+        Set<GroupData> before = app.group().all();
 
         GroupData group = new GroupData().withName("test2");
         app.group().create(group);
 
-        //будет содержать список элементов после того как будет создана группа
-        List<GroupData> after = app.group().list();
+        Set<GroupData> after = app.group().all();
 
         //сравниваем размеры списков
         Assert.assertEquals(after.size(), before.size() + 1);
 
+        //анонимная ф-ия в качестве параметра принимает группу, а в качестве рез-та выдает идент-ор группы
+        group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt());
+
         //компаратор - это интерфейс, объявляет методы, которые должны быть
         before.add(group);
-
-        //локальная переменная + лямбда  выражение(анонимая ф-я, на вход принимает 2 сравниваемых группы, и выполняет сравнение идент-ов
-        Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-
-        //передаем переменную byId, сортируем первый список
-        before.sort(byId);
-        //сортируем второй список
-        after.sort(byId);
 
         //сравниваем отсортированные списки
         Assert.assertEquals(before, after);

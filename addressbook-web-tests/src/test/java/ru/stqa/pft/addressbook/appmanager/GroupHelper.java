@@ -6,7 +6,9 @@ import org.openqa.selenium.WebElement;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GroupHelper extends HelperBase {
 
@@ -59,11 +61,11 @@ public class GroupHelper extends HelperBase {
 
     //модификация группы
     public void modify(int index, GroupData group) {
-       selectGroup(index);
-       initGroupModification();
-       fillGroupForm(group);
-       submitGroupModification();
-       returnToGroupPage();
+        selectGroup(index);
+        initGroupModification();
+        fillGroupForm(group);
+        submitGroupModification();
+        returnToGroupPage();
     }
 
     //удаление групп
@@ -84,6 +86,26 @@ public class GroupHelper extends HelperBase {
 
     public List<GroupData> list() {
         List<GroupData> groups = new ArrayList<GroupData>();
+        //получаем список объектов типа web элемент (найти все элементы которые имеют тэг span и класс group)
+        List<WebElement> elements = wd.findElements(By.cssSelector("span.group"));
+        //проходим по каждому element
+        for (WebElement element : elements) {
+            //и получаем название группы
+            String name = element.getText();
+
+            //получаем идентификатор группы из элемента "span.group"
+            //Integer.parseInt() - преобразования типа данных в int
+            int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+
+            //добавляем созданный объект в список
+            groups.add(new GroupData().withId(id).withName(name));
+        }
+        return groups;
+    }
+
+    //возвращает не список а множество
+    public Set<GroupData> all() {
+        Set<GroupData> groups = new HashSet<GroupData>();
         //получаем список объектов типа web элемент (найти все элементы которые имеют тэг span и класс group)
         List<WebElement> elements = wd.findElements(By.cssSelector("span.group"));
         //проходим по каждому element
