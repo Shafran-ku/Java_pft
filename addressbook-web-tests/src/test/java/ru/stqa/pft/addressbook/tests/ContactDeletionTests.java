@@ -5,7 +5,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
-import java.util.List;
 import java.util.Set;
 
 public class ContactDeletionTests extends TestBase {
@@ -15,7 +14,7 @@ public class ContactDeletionTests extends TestBase {
         app.goTo().HomePage();
 
         //проверка наличия контакта для удаления: если нечего удалять, то создать контакт
-        if (app.contact().list().size() == 0)  {
+        if (app.contact().all().size() == 0)  {
             app.contact().create(new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
                     .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1"));
         }

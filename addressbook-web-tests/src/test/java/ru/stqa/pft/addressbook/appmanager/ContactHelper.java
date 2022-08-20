@@ -7,7 +7,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,9 +37,8 @@ public class ContactHelper extends HelperBase {
         type(By.name("home"), contactData.getHomephone());
 
 
-//Если это создание контакта, то проверяем наличие выпадающего списка групп "new_group"
-//+проверка: если модификация контакта, то выпадающего списка групп быть не должно
-
+    //Если это создание контакта, то проверяем наличие выпадающего списка групп "new_group"
+        //+проверка: если модификация контакта, то выпадающего списка групп быть не должно
         //если это форма создания
         if (creation) {
             if (isElementPresent(By.name(contactData.getGroup()))) {
@@ -51,25 +49,33 @@ public class ContactHelper extends HelperBase {
         } else Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
 
+    public void selectContactById(int id)  {
+        wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+    }
+
     public void initContactCreation() {
         click(By.linkText("add new"));
     }
 
-    //находим все элементы по локатору и среди всех выбираем нужный по индексу, и делаем клик
-    public void selectAndInitContactModification(int index) {
-        wd.findElements(By.xpath("//img[@alt='Edit']")).get(index).click();
+    public void initContactModification(int id) {
+        //wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
         //click(By.xpath("//img[@alt='Edit']"));
+        wd.findElement(By.xpath("//a[@href='edit.php?id=" + id + "'" + "]")).click();
     }
 
-   /*
-    public void selectAndInitContactModificationById(int id) {
-        wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
-        //click(By.xpath("//img[@alt='Edit']"));
-    }
-    */
 
-    public void selectContactById(int id)  {
-        wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+    //выбор контакта и нажатие на иконку "редактировать"
+    public void modify(ContactData contact) {
+        //wd.findElements(By.xpath("//img[@alt='Edit']")).get(contact).click();
+        //click(By.xpath("//img[@alt='Edit']"));
+        selectContactById(contact.getId());
+        initContactModification(contact.getId());
+        fillContactForm(contact, false);
+        submitContactModification();
+    }
+
+    public void submitContactModification() {
+        click(By.name("update"));
     }
 
     public void deleteSelectedContact() {
@@ -84,48 +90,10 @@ public class ContactHelper extends HelperBase {
         returnToHomePage();
     }
 
-    public void delete(int index) {
-        selectAndInitContactModification(index);
-        deleteSelectedContact();
-    }
-
     public void delete(ContactData contact) {
         selectContactById(contact.getId());
         deleteSelectedContact();
         isAlertAccept();
-    }
-
-    public boolean isThereAnyContact() {
-        return isElementPresent(By.name("selected[]"));
-    }
-
-    public int getContactCount() {
-        return wd.findElements(By.name("entry")).size();
-        //Selected[]    entry
-    }
-
-    public List<ContactData> list() {
-        //список который будем заполнять
-        List<ContactData> contacts = new ArrayList<ContactData>();
-
-        //получаем список объектов
-        List<WebElement> elements = wd.findElements(By.name("entry"));
-
-        //пройти в цикле по элементам (строкам таблицы)
-        for (WebElement element : elements) {
-            //и из каждого получить text:  имя + фамилия контакта
-            //String name = element.getText();
-            List<WebElement> cells = element.findElements(By.tagName("td"));
-
-            //получаем идентификатор для каждого контакта(поиск элемента "id" по тегу "input" внутри элемента "entry");
-            //Integer.parseInt() - преобразования типа данных в int
-            int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("id"));
-
-            //добавляем созданный объект в contact
-            contacts.add(new ContactData().withId(id).withFirstname(cells.get(2).getText())
-                    .withLastname(cells.get(1).getText()));
-        }
-        return contacts;
     }
 
     //возвращается множество
@@ -152,9 +120,15 @@ public class ContactHelper extends HelperBase {
         return contacts;
     }
 
-    public void submitContactModification() {
-        click(By.name("update"));
+    public boolean isThereAnyContact() {
+        return isElementPresent(By.name("selected[]"));
     }
+
+    public int getContactCount() {
+        return wd.findElements(By.name("entry")).size();
+        //Selected[]    entry
+    }
+
 
 }
 
