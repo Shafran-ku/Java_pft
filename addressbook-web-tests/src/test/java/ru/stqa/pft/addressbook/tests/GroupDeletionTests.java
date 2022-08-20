@@ -34,10 +34,13 @@ public class GroupDeletionTests extends TestBase {
         Groups before = app.group().all();
         GroupData deletedGroup = before.iterator().next();
         app.group().delete(deletedGroup);
+
+        //сравниваем размеры (размер нового множества на 1 меньше старого, поэтому от старого отнимаем 1)
+        assertThat(app.group().count(), equalTo(before.size() - 1));
+
         //будет содержать множество элементов после того как будет создана группа
         Groups after = app.group().all();
-        //сравниваем размеры (размер нового множества на 1 меньше старого, поэтому от старого отнимаем 1)
-        assertEquals(after.size(), before.size() -1);
+
         assertThat(after, equalTo(before.without(deletedGroup)));
     }
 

@@ -82,7 +82,7 @@ public class GroupHelper extends HelperBase {
     }
 
     //подсчитать кол-во элементов "selected[]" на странице (кол-во групп)
-    public int getGroupCounter() {
+    public int count() {
         return wd.findElements(By.name("selected[]")).size();
     }
 

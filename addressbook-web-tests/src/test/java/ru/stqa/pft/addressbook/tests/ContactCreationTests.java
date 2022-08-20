@@ -32,15 +32,36 @@ public class ContactCreationTests extends TestBase {
                 .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1");
         app.contact().create(contact);
 
+        //сравнение размера до и после добавления
+        assertThat(app.contact().count(), equalTo(before.size() + 1));
+
         //множество элементов после того как будет создана новая группа
         Contacts after = app.contact().all();
-
-        //сравнение размера до и после добавления
-        assertThat(after.size(), equalTo(before.size() + 1));
 
         //сравниваем по содержимому (контакты сравниваеются по firstname и lastname, id не учитываются
         assertThat(after, equalTo(before.withAdded(
                 contact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+    }
+
+    @Test
+    public void testBadContactCreation() throws Exception {
+
+        //множество элементов до добавления
+        Contacts before = app.contact().all();
+
+        //сделали переменную
+        ContactData contact = new ContactData().withFirstname("Den  '  ").withLastname("Kh.").withAddress("Suvorova st.")
+                .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1");
+        app.contact().create(contact);
+
+        //сравнение размера до и после добавления
+        assertThat(app.contact().count(), equalTo(before.size()));
+
+        //множество элементов после того как будет создана новая группа
+        Contacts after = app.contact().all();
+
+        //сравниваем по содержимому (контакты сравниваеются по firstname и lastname, id не учитываются
+        assertThat(after, equalTo(before));
     }
 
 }

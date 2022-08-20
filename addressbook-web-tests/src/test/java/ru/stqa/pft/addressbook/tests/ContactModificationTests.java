@@ -50,11 +50,12 @@ public class ContactModificationTests extends TestBase {
         app.contact().modify(contact);
         app.goTo().HomePage();
 
+        //сравнение размера до и после добавления
+        assertThat(app.contact().count(), equalTo(before.size()));
+
         //после того как будет модификация
         Contacts after = app.contact().all();
 
-        //сравнение кол-ва контактов до добавления и после
-        assertEquals(after.size(), before.size());
         //сравниваем по содержимому
         assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
     }
