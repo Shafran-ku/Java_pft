@@ -8,7 +8,9 @@ import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ContactHelper extends HelperBase {
 
@@ -59,9 +61,19 @@ public class ContactHelper extends HelperBase {
         //click(By.xpath("//img[@alt='Edit']"));
     }
 
+   /*
+    public void selectAndInitContactModificationById(int id) {
+        wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+        //click(By.xpath("//img[@alt='Edit']"));
+    }
+    */
+
+    public void selectContactById(int id)  {
+        wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+    }
 
     public void deleteSelectedContact() {
-        click(By.xpath("//div[@id='content']/form[2]/input[2]"));
+        click(By.xpath("//input[@value='Delete']"));
 
     }
 
@@ -77,14 +89,11 @@ public class ContactHelper extends HelperBase {
         deleteSelectedContact();
     }
 
-    /*
-
-    //проверка наличия иконки редактирования (чтобы понять есть ли хоть один контакт для удаления на форме)
-    public boolean isThereAGroup() {
-        return isElementPresent(By.xpath("//img[@alt='Edit']"));
+    public void delete(ContactData contact) {
+        selectContactById(contact.getId());
+        deleteSelectedContact();
+        isAlertAccept();
     }
-
-     */
 
     public boolean isThereAnyContact() {
         return isElementPresent(By.name("selected[]"));
@@ -119,8 +128,33 @@ public class ContactHelper extends HelperBase {
         return contacts;
     }
 
+    //возвращается множество
+    public Set<ContactData> all() {
+        Set<ContactData> contacts = new HashSet<ContactData>();
+
+        //получаем список объектов
+        List<WebElement> elements = wd.findElements(By.name("entry"));
+
+        //пройти в цикле по элементам (строкам таблицы)
+        for (WebElement element : elements) {
+            //и из каждого получить text:  имя + фамилия контакта
+            //String name = element.getText();
+            List<WebElement> cells = element.findElements(By.tagName("td"));
+
+            //получаем идентификатор для каждого контакта(поиск элемента "id" по тегу "input" внутри элемента "entry");
+            //Integer.parseInt() - преобразования типа данных в int
+            int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("id"));
+
+            //добавляем созданный объект в contact
+            contacts.add(new ContactData().withId(id).withFirstname(cells.get(2).getText())
+                    .withLastname(cells.get(1).getText()));
+        }
+        return contacts;
+    }
+
     public void submitContactModification() {
         click(By.name("update"));
     }
+
 }
 

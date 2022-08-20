@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
 import java.util.List;
+import java.util.Set;
 
 public class ContactDeletionTests extends TestBase {
     //предусловия теста
@@ -23,22 +24,20 @@ public class ContactDeletionTests extends TestBase {
     @Test
     public void testContactDeletion() {
 
-        //список элементов до удаления
-        List<ContactData> before = app.contact().list();
-
-        int index = before.size() - 1;
-        app.contact().delete(index);
+        //множество элементов до удаления
+        Set<ContactData> before = app.contact().all();
+        ContactData deletedContact = before.iterator().next();
+        app.contact().delete(deletedContact);
         app.goTo().HomePage();
 
         //список элементов после удаления контакта
-        List<ContactData> after = app.contact().list();
+        Set<ContactData> after = app.contact().all();
 
         //сравнение кол-ва контактов до добавления и после
         Assert.assertEquals(after.size(), before.size() - 1);
-
         
         //удаляем ненужный элемент из списка для сравнения
-        before.remove(index);
+        before.remove(deletedContact);
 
         //сравниваем 2 списка
         Assert.assertEquals(before, after);

@@ -5,6 +5,8 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 
+import java.time.Duration;
+
 //здесь (в базовом классе) создан конструктор, который принимает в качестве параметра ссылку на драйвер
 public class HelperBase {
     protected WebDriver wd;
@@ -20,6 +22,15 @@ public class HelperBase {
     public boolean isAlertPresent() {
         try {
             wd.switchTo().alert();
+            return true;
+        } catch (NoAlertPresentException e) {
+            return false;
+        }
+    }
+
+    public boolean isAlertAccept() {
+        try {
+            wd.switchTo().alert().accept();
             return true;
         } catch (NoAlertPresentException e) {
             return false;

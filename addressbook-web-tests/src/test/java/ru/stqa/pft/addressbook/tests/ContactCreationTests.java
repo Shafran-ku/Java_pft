@@ -7,6 +7,7 @@ import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 public class ContactCreationTests extends TestBase {
     //предусловия теста
@@ -23,31 +24,29 @@ public class ContactCreationTests extends TestBase {
     @Test
     public void testContactCreation() throws Exception {
 
-        //список элементов до добавления
-        List<ContactData> before = app.contact().list();
+        //множество элементов до добавления
+        Set<ContactData> before = app.contact().all();
 
         //сделали переменную
         ContactData contact = new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
                 .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1");
         app.contact().create(contact);
 
-        //список элементов после того как будет создана новая группа
-        List<ContactData> after = app.contact().list();
+        //множество элементов после того как будет создана новая группа
+        Set<ContactData> after = app.contact().all();
 
         //сравнение размера списков до и после добавления
         Assert.assertEquals(after.size(), before.size() + 1);
 
+
+        //поток объектов типа contactData превратим в поток идент-ров
+        //mapToInt - анонимная ф-ия, которая будет примняться ко всем элементам потока и каждый из них будет преобраз-ся в число
+        //анонимная ф-ия в качестве параметра принимает контакт, а в качестве рез-та выдает идент-ор контакта (т.е. преобразует объект в число)
+        //max() - находим максимальный и получаем число (getAsInt)
+        contact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt());
         before.add(contact);
 
-        //локальная переменная + лямбда  выражение(анонимая ф-я, на вход принимает 2 сравниваемых контакта, и выполняет сравнение их идент-ов
-        Comparator<? super ContactData> byId = (c1, c2) -> Integer.compare((c1.getId()), c2.getId());
-
-        //сортируем старый список
-        before.sort(byId);
-        //сортируем новый список
-        after.sort(byId);
-
-        //сравниваем упорядоченные списки (контакты сравниваеются по firstname и lastname, id не учитываются
+        //сравниваем (контакты сравниваеются по firstname и lastname, id не учитываются
         Assert.assertEquals(before, after);
     }
 
