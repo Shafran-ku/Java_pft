@@ -1,12 +1,20 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class ContactModificationTests extends TestBase {
    //предусловия теста
@@ -30,8 +38,8 @@ public class ContactModificationTests extends TestBase {
     @Test
     public void testContactModification() {
 
-        //множество элементов до модификации
-        Set<ContactData> before = app.contact().all();
+        // до модификации
+        Contacts before = app.contact().all();
 
         ContactData modifiedContact = before.iterator().next();
 
@@ -42,18 +50,13 @@ public class ContactModificationTests extends TestBase {
         app.contact().modify(contact);
         app.goTo().HomePage();
 
-        //множество элементов после того как будет модификация
-        Set<ContactData> after = app.contact().all();
+        //после того как будет модификация
+        Contacts after = app.contact().all();
 
         //сравнение кол-ва контактов до добавления и после
-        Assert.assertEquals(after.size(), before.size());
-
-        //модифицируем старый список - удалим из списка элемент, который ранее удаляли
-        before.remove(modifiedContact);
-        //а вместо удаленного добавим элемент, который должен появиться после модификации
-        before.add(contact);
-
-        Assert.assertEquals(before, after);
+        assertEquals(after.size(), before.size());
+        //сравниваем по содержимому
+        assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
     }
 
 }
