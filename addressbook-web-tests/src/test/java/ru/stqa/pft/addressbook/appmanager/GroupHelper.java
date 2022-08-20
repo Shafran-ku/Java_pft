@@ -7,9 +7,7 @@ import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class GroupHelper extends HelperBase {
 
@@ -55,6 +53,7 @@ public class GroupHelper extends HelperBase {
         initGroupCreation();
         fillGroupForm(group);
         submitGroupCreation();
+        groupCache = null;
         returnToGroupPage();
     }
 
@@ -64,12 +63,17 @@ public class GroupHelper extends HelperBase {
         initGroupModification();
         fillGroupForm(group);
         submitGroupModification();
+        groupCache = null;
         returnToGroupPage();
     }
 
     public void delete(GroupData group) {
         selectGroupById(group.getId());
         deleteSelectedGroups();
+
+        //сбросить кэш
+        groupCache = null;
+
         returnToGroupPage();
     }
 
@@ -81,6 +85,10 @@ public class GroupHelper extends HelperBase {
     public int getGroupCounter() {
         return wd.findElements(By.name("selected[]")).size();
     }
+
+    //Кэш
+    private Groups groupCache = null;
+
 
     public List<GroupData> list() {
         List<GroupData> groups = new ArrayList<GroupData>();
@@ -103,7 +111,11 @@ public class GroupHelper extends HelperBase {
 
     //возвращает не список а множество
     public Groups all() {
-        Groups groups = new Groups();
+        //если кэш не пустой то вернуть его копию
+        if (groupCache != null) {
+            return new Groups(groupCache);
+        }
+        groupCache = new Groups();
         //получаем список объектов типа web элемент (найти все элементы которые имеют тэг span и класс group)
         List<WebElement> elements = wd.findElements(By.cssSelector("span.group"));
         //проходим по каждому element
@@ -116,9 +128,9 @@ public class GroupHelper extends HelperBase {
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
 
             //добавляем созданный объект в список
-            groups.add(new GroupData().withId(id).withName(name));
+            groupCache.add(new GroupData().withId(id).withName(name));
         }
-        return groups;
+        return new Groups(groupCache);
     }
 
     //проверка наличия группы test1 при создании контакта

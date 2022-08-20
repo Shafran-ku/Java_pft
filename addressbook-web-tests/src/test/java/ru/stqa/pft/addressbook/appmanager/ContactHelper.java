@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.util.HashSet;
 import java.util.List;
@@ -73,6 +74,7 @@ public class ContactHelper extends HelperBase {
         initContactModification(contact.getId());
         fillContactForm(contact, false);
         submitContactModification();
+        contactCache = null;
     }
 
     public void submitContactModification() {
@@ -88,18 +90,29 @@ public class ContactHelper extends HelperBase {
         initContactCreation();
         fillContactForm(contact, true);
         submitContactCreation();
+        contactCache = null;
         returnToHomePage();
     }
 
     public void delete(ContactData contact) {
         selectContactById(contact.getId());
         deleteSelectedContact();
+        contactCache = null;
         isAlertAccept();
     }
 
+    //Кэш
+    private Contacts contactCache = null;
+
+
     //возвращается множество
     public Contacts all() {
-        Contacts contacts = new Contacts();
+        //если кэш не пустой то вернуть его копию
+        if (contactCache != null) {
+            return new Contacts(contactCache);
+        }
+
+        contactCache = new Contacts();
 
         //получаем список объектов
         List<WebElement> elements = wd.findElements(By.name("entry"));
@@ -115,10 +128,10 @@ public class ContactHelper extends HelperBase {
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("id"));
 
             //добавляем созданный объект в contact
-            contacts.add(new ContactData().withId(id).withFirstname(cells.get(2).getText())
+            contactCache.add(new ContactData().withId(id).withFirstname(cells.get(2).getText())
                     .withLastname(cells.get(1).getText()));
         }
-        return contacts;
+        return new Contacts(contactCache);
     }
 
     public boolean isThereAnyContact() {
