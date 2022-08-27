@@ -29,7 +29,7 @@ public class ContactCreationTests extends TestBase {
 
         //сделали переменную
         ContactData contact = new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
-                .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1");
+                .withEmail("den@mail.ru").withHomePhone("+79188888777").withGroup("test1");
         app.contact().create(contact);
 
         //сравнение размера до и после добавления
@@ -51,7 +51,7 @@ public class ContactCreationTests extends TestBase {
 
         //сделали переменную
         ContactData contact = new ContactData().withFirstname("Den  '  ").withLastname("Kh.").withAddress("Suvorova st.")
-                .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1");
+                .withEmail("den@mail.ru").withHomePhone("+79188888777").withGroup("test1");
         app.contact().create(contact);
 
         //сравнение размера до и после добавления

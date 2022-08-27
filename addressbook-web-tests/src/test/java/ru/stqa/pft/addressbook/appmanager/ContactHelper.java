@@ -56,19 +56,12 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
-    public void initContactModification(int id) {
-        //wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
-        //click(By.xpath("//img[@alt='Edit']"));
-        wd.findElement(By.xpath("//a[@href='edit.php?id=" + id + "'" + "]")).click();
-    }
-
-
     //выбор контакта и нажатие на иконку "редактировать"
     public void modify(ContactData contact) {
         //wd.findElements(By.xpath("//img[@alt='Edit']")).get(contact).click();
         //click(By.xpath("//img[@alt='Edit']"));
         selectContactById(contact.getId());
-        initContactModification(contact.getId());
+        initContactModificationById(contact.getId());
         fillContactForm(contact, false);
         submitContactModification();
         contactCache = null;
@@ -108,7 +101,6 @@ public class ContactHelper extends HelperBase {
         if (contactCache != null) {
             return new Contacts(contactCache);
         }
-
         contactCache = new Contacts();
 
         //получаем список объектов
@@ -139,6 +131,36 @@ public class ContactHelper extends HelperBase {
         return wd.findElements(By.name("entry")).size();
     }
 
+    public ContactData infoFromEditForm(ContactData contact) {
+        initContactModificationById(contact.getId());
+        //извлекаем атрибуты
+        String firstname = wd.findElement(By.name("firstname")).getAttribute("value");
+        String lastname = wd.findElement(By.name("lastname")).getAttribute("value");
+        String home = wd.findElement(By.name("home")).getAttribute("value");
+        String mobile = wd.findElement(By.name("mobile")).getAttribute("value");
+        String work = wd.findElement(By.name("work")).getAttribute("value");
+        wd.navigate().back();
+        //создаем объект ContactData с полученными атрибутами
+        return new ContactData().withId(contact.getId()).withFirstname(firstname).withLastname(lastname)
+                .withHomePhone(home).withMobilePhone(mobile).withWorkPhone(work);
+    }
 
+    //в качестве параметра принимает идентификатор контакта
+    public void initContactModificationById(int id) {
+        //wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+        //click(By.xpath("//img[@alt='Edit']"));
+        //wd.findElement(By.xpath("//a[@href='edit.php?id=" + id + "'" + "]")).click();     выключил в 5.9
+
+        //метод String.format - делает подстановку значений внутрь строки (вместо %s подставится значение)
+        /*
+        WebElement checkbox = wd.findElement(By.cssSelector(String.format("input[value='%s']", id)));
+        WebElement row = checkbox.findElement(By.xpath("./../.."));
+        List<WebElement> cells = row.findElements(By.tagName("td"));
+        cells.get(7).findElement(By.tagName("a")).click();
+        */
+
+        //поиск по идентификатору в ссылке на редактирование, и нажатие на карандашик (%s - здесь подставится значение)
+        wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
+    }
 }
 

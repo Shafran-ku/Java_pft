@@ -31,7 +31,7 @@ public class ContactModificationTests extends TestBase {
             }
             //если нет контакта, но есть группа, создаем контакт
             app.contact().create(new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
-                    .withEmail("den@mail.ru").withHomephone("+79188888777").withGroup("test1"));
+                    .withEmail("den@mail.ru").withHomePhone("+79188888777").withGroup("test1"));
         }
     }
 
@@ -45,7 +45,7 @@ public class ContactModificationTests extends TestBase {
 
         //при модификации контакта указываем новые данные, а идентификатор сохраняем старый
         ContactData contact =  new ContactData().withId(modifiedContact.getId()).withFirstname("Den")
-                .withLastname("Kh.").withAddress("Suvorova st.").withEmail("den@mail.ru").withHomephone("+79188888777");
+                .withLastname("Kh.").withAddress("Suvorova st.").withEmail("den@mail.ru").withHomePhone("+79188888777");
 
         app.contact().modify(contact);
         app.goTo().HomePage();
