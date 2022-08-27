@@ -4,6 +4,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -30,14 +33,22 @@ public class ContactPhoneTests extends TestBase {
         //выбираем контакт
         ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
 
-        //сравниваем телефоны на главной странице и странице редактирования (с очисткой от символов- метод cleaned)
-        assertThat(contact.getHomePhone(), equalTo(cleaned(contactInfoFromEditForm.getHomePhone())));
-        assertThat(contact.getMobilePhone(), equalTo(cleaned(contactInfoFromEditForm.getMobilePhone())));
-        assertThat(contact.getWorkPhone(), equalTo(cleaned(contactInfoFromEditForm.getWorkPhone())));
+        //сравниваем телефоны контакта, которые загружены с главной стр и стр редакт-я (все телефоны склеены в одну строку)
+        assertThat(contact.getAllPhones(), equalTo(mergePhones(contactInfoFromEditForm)));
+        }
+
+    private String mergePhones(ContactData contact) {
+        //список из 3х элементов (телефоны)
+        //из этого списка отсеем (метод filter) элементы =null, очистим (метод map(ContactPhoneTests::cleaned))
+        //и склеем (метод Collectors.joining)
+        return Arrays.asList(contact.getHomePhone(), contact.getMobilePhone(), contact.getWorkPhone())
+                .stream().filter((s) -> ! s.equals(""))
+                .map(ContactPhoneTests::cleaned)
+                .collect(Collectors.joining("\n"));
     }
 
     //делаем метод, он будет приводить формат телефона к очищенному виду (без (), -, и пробелов)
-    public String cleaned(String phone) {
+    public static String cleaned(String phone) {
         //заменяем все "плохие" символы на пустую строку
         // \\s - пробел, -() -значит символы "-", "(" и ")"
         return phone.replaceAll("\\s", "").replaceAll("[-()]", "");

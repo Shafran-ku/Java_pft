@@ -73,7 +73,6 @@ public class ContactHelper extends HelperBase {
 
     public void deleteSelectedContact() {
         click(By.xpath("//input[@value='Delete']"));
-
     }
 
     public void create(ContactData contact) {
@@ -119,12 +118,11 @@ public class ContactHelper extends HelperBase {
             String lastname = cells.get(1).getText();
             String firstname = cells.get(2).getText();
 
-            //режем строку в ячейке с телефонами по разделителю строки \n
-            String[] phones = cells.get(5).getText().split("\n");
+            String allPhones = cells.get(5).getText();
 
             //добавляем созданный объект в contact
             contactCache.add(new ContactData().withId(id).withFirstname(firstname).withLastname(lastname)
-                    .withHomePhone(phones[0]).withMobilePhone(phones[1]).withWorkPhone(phones[2]));
+                    .withAllPhones(allPhones));
         }
         return new Contacts(contactCache);
     }
