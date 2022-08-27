@@ -28,9 +28,16 @@ public class ContactData {
     public String getEmail() {
         return email;
     }
-
-    public String getHomephone() {
+    public String getHomePhone() {
         return homePhone;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public String getWorkPhone() {
+        return workPhone;
     }
 
     public String getGroup() {
@@ -67,20 +74,15 @@ public class ContactData {
         return this;
     }
 
-    //21.08
     public ContactData withMobilePhone(String mobilePhone) {
         this.mobilePhone = mobilePhone;
         return this;
     }
 
-    //21.08
     public ContactData withWorkPhone(String workPhone) {
         this.workPhone = workPhone;
         return this;
     }
-
-
-
 
     public ContactData withGroup(String group) {
         this.group = group;

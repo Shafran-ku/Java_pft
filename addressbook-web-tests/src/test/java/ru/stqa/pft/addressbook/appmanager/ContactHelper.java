@@ -33,7 +33,7 @@ public class ContactHelper extends HelperBase {
         wd.findElement(By.name("lastname")).sendKeys(contactData.getLastname());
         type(By.name("address"), contactData.getAddress());
         type(By.name("email"), contactData.getEmail());
-        type(By.name("home"), contactData.getHomephone());
+        type(By.name("home"), contactData.getHomePhone());
 
 
     //Если это создание контакта, то проверяем наличие выпадающего списка групп "new_group"
@@ -116,9 +116,15 @@ public class ContactHelper extends HelperBase {
             //Integer.parseInt() - преобразования типа данных в int
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("id"));
 
+            String lastname = cells.get(1).getText();
+            String firstname = cells.get(2).getText();
+
+            //режем строку в ячейке с телефонами по разделителю строки \n
+            String[] phones = cells.get(5).getText().split("\n");
+
             //добавляем созданный объект в contact
-            contactCache.add(new ContactData().withId(id).withFirstname(cells.get(2).getText())
-                    .withLastname(cells.get(1).getText()));
+            contactCache.add(new ContactData().withId(id).withFirstname(firstname).withLastname(lastname)
+                    .withHomePhone(phones[0]).withMobilePhone(phones[1]).withWorkPhone(phones[2]));
         }
         return new Contacts(contactCache);
     }

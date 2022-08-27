@@ -4,6 +4,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class ContactPhoneTests extends TestBase {
 
     //предусловия теста
@@ -26,5 +29,17 @@ public class ContactPhoneTests extends TestBase {
 
         //выбираем контакт
         ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
+
+        //сравниваем телефоны на главной странице и странице редактирования (с очисткой от символов- метод cleaned)
+        assertThat(contact.getHomePhone(), equalTo(cleaned(contactInfoFromEditForm.getHomePhone())));
+        assertThat(contact.getMobilePhone(), equalTo(cleaned(contactInfoFromEditForm.getMobilePhone())));
+        assertThat(contact.getWorkPhone(), equalTo(cleaned(contactInfoFromEditForm.getWorkPhone())));
+    }
+
+    //делаем метод, он будет приводить формат телефона к очищенному виду (без (), -, и пробелов)
+    public String cleaned(String phone) {
+        //заменяем все "плохие" символы на пустую строку
+        // \\s - пробел, -() -значит символы "-", "(" и ")"
+        return phone.replaceAll("\\s", "").replaceAll("[-()]", "");
     }
 }
