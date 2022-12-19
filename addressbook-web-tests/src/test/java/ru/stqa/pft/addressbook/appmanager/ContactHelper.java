@@ -136,6 +136,7 @@ public class ContactHelper extends HelperBase {
     }
 
     public ContactData infoFromEditForm(ContactData contact) {
+        //выбор контакта по идентификатору
         initContactModificationById(contact.getId());
         //извлекаем атрибуты
         String firstname = wd.findElement(By.name("firstname")).getAttribute("value");
@@ -155,15 +156,26 @@ public class ContactHelper extends HelperBase {
         //click(By.xpath("//img[@alt='Edit']"));
         //wd.findElement(By.xpath("//a[@href='edit.php?id=" + id + "'" + "]")).click();     выключил в 5.9
 
-        //метод String.format - делает подстановку значений внутрь строки (вместо %s подставится значение)
-        /*
+        /* один из методов построения локатора***********************************************************************
+        //метод String.format - делает подстановку значений внутрь строки (вместо %s подставится значение)//
+        //ищем чекбокс в строке контакта (элемент с тегом input и заданным атрибутом)
         WebElement checkbox = wd.findElement(By.cssSelector(String.format("input[value='%s']", id)));
+
+        //1.выполняем поиск нужной строки с чекбоксом - переход к родительскому элементу чекбокса - 2 прыжка вверх (на ячейку, потом к строке таблицы)
         WebElement row = checkbox.findElement(By.xpath("./../.."));
+
+        //2.нужно попасть в ячейку с иконкой карандаша:
+        //берем все элементы и ищем внутри элемент с тегом td
         List<WebElement> cells = row.findElements(By.tagName("td"));
+
+        //3.среди найденных ячеек берем по номеру нужную (карандашик в 7ом столбце),
+        //находим в ней ссылку с тегом "a" и кликаем по ней
         cells.get(7).findElement(By.tagName("a")).click();
         */
 
+        //+ один из методов построения локатора-находим нужный элемент сразу******************************************
         //поиск по идентификатору в ссылке на редактирование, и нажатие на карандашик (%s - здесь подставится значение)
+        //+ здесь использован метод String.format - делает подстановку значений внутрь строки (вместо %s подставится значение
         wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
     }
 }
