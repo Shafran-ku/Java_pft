@@ -35,6 +35,9 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contactData.getEmail());
         type(By.name("home"), contactData.getHomePhone());
 
+        //добавляем также фото с полным путем к файлу
+        attach(By.name("photo"),contactData.getPhoto());
+
 
         //Если это создание контакта, то проверяем наличие выпадающего списка групп "new_group"
         //+проверка: если модификация контакта, то выпадающего списка групп быть не должно

@@ -5,6 +5,7 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 
+import java.io.File;
 import java.time.Duration;
 
 //здесь (в базовом классе) создан конструктор, который принимает в качестве параметра ссылку на драйвер
@@ -46,6 +47,15 @@ public class HelperBase {
                 wd.findElement(locator).clear();
                 wd.findElement(locator).sendKeys(text);
             }
+        }
+    }
+
+    //метод для добавления картинки (файловое поле ввода, на которых не нужно кликать)
+    //абсолютный путь getAbsolutePath преобразовывается в относительный
+    protected void attach(By locator, File file) {
+        //если в поле передали null, то поле не заполняем, иначе чистим значением поля и заполняем
+        if (file != null) {
+                wd.findElement(locator).sendKeys(file.getAbsolutePath());
         }
     }
 
