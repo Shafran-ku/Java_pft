@@ -49,7 +49,7 @@ public class ContactDetailsTests extends TestBase {
         //из этого списка отсеем (метод filter) элементы =null,
         // очистим (метод map(ContactPhoneTests::cleaned))
         //и склеем (метод Collectors.joining)
-        return Arrays.asList(contact.getHomePhone(), contact.getMobilePhone(), contact.getWorkPhone())
+        return Arrays.asList(contact.getHomePhone(), contact.getMobilePhone(), contact.getWorkPhone(), contact.getPhone2())
                 .stream().filter((s) -> !s.equals(""))
                 .map(ContactDetailsTests::cleanedPhone)
                 .collect(Collectors.joining("\n"));
