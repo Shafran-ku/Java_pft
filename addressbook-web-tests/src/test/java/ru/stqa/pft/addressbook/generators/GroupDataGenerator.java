@@ -40,10 +40,12 @@ public class GroupDataGenerator {
         //запуск
         generator.run();
 
+        /*
         //генерация данных
         //передается количество строк и путь к файлу
         int count = Integer.parseInt(args[0]);
         File file = new File(args[1]);
+         */
     }
 
     private void run() throws IOException {
