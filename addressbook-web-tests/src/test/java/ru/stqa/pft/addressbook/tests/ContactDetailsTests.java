@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -55,15 +56,24 @@ public class ContactDetailsTests extends TestBase {
                 .collect(Collectors.joining("\n"));
     }
 
-    //+mergeAddress
+    //+mergeAddress (используется список из одного элемента)
+    private String mergeAddress(ContactData contact) {
+        return Collections.singletonList(contact.getAddress())
+                .stream().filter((s) -> !s.equals(""))
+                .collect(Collectors.joining("\n"));
+    }
+    /* используется список
     private String mergeAddress(ContactData contact) {
         return Arrays.asList(contact.getAddress())
                 .stream().filter((s) -> !s.equals(""))
                 .collect(Collectors.joining("\n"));
     }
+    */
 
 
-    //+mergeAddress
+
+
+    //+mergeEmail
     private String mergeEmail(ContactData contact) {
         return Arrays.asList(contact.getEmail(), contact.getEmail2(), contact.getEmail3())
                 .stream().filter((s) -> !s.equals(""))
@@ -71,7 +81,7 @@ public class ContactDetailsTests extends TestBase {
                 .collect(Collectors.joining("\n"));
     }
 
-    //делаем метод, он будет приводить формат телефона к очищенному виду (без (), -, и пробелов)
+    //метод приводит формат телефона к очищенному виду (без (), -, и пробелов)
     public static String cleanedPhone(String phone) {
         //заменяем все "плохие" символы на пустую строку
         // \\s - пробел, -() -значит символы "-", "(" и ")"
