@@ -46,7 +46,8 @@ public class ContactDetailsTests extends TestBase {
 
     private String mergePhones(ContactData contact) {
         //список из 3х элементов (телефоны)
-        //из этого списка отсеем (метод filter) элементы =null, очистим (метод map(ContactPhoneTests::cleaned))
+        //из этого списка отсеем (метод filter) элементы =null,
+        // очистим (метод map(ContactPhoneTests::cleaned))
         //и склеем (метод Collectors.joining)
         return Arrays.asList(contact.getHomePhone(), contact.getMobilePhone(), contact.getWorkPhone())
                 .stream().filter((s) -> !s.equals(""))
@@ -80,7 +81,7 @@ public class ContactDetailsTests extends TestBase {
     //+cleanedEmail
     public static String cleanedEmail(String email) {
         //заменяем все "плохие" символы на пустую строку
-        // \\s - пробел, -() -значит символы "-", "(" и ")"
-        return email.replaceAll("\\s", "").replaceAll("[-()]", "");
+        // "\\s+" - больше 1 рпобела заменяем на 1 пробел при сравнении
+        return email.replaceAll("\\s+", " ");
     }
 }
