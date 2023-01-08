@@ -42,7 +42,6 @@ public class ContactDetailsTests extends TestBase {
 
         //+для email
         assertThat(contact.getAllEmail(), equalTo(mergeEmail(contactInfoFromEditForm)));
-
     }
 
     private String mergePhones(ContactData contact) {
@@ -62,16 +61,6 @@ public class ContactDetailsTests extends TestBase {
                 .stream().filter((s) -> !s.equals(""))
                 .collect(Collectors.joining("\n"));
     }
-    /* используется список
-    private String mergeAddress(ContactData contact) {
-        return Arrays.asList(contact.getAddress())
-                .stream().filter((s) -> !s.equals(""))
-                .collect(Collectors.joining("\n"));
-    }
-    */
-
-
-
 
     //+mergeEmail
     private String mergeEmail(ContactData contact) {
