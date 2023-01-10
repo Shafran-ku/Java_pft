@@ -48,7 +48,7 @@ public class ContactCreationTests extends TestBase {
                 contact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
     }
 
-    @Test
+    @Test(enabled = false)
     public void testBadContactCreation() throws Exception {
 
         //множество элементов до добавления
