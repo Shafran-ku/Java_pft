@@ -1,8 +1,16 @@
 package ru.stqa.pft.addressbook.model;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 import java.util.Objects;
 
+//аннотация для именования объектов в файле xml "group"
+@XStreamAlias("group")
 public class GroupData {
+    //указываем что ненужно сохранять в xml идентификатор id (@XStreamOmitField означает пропустить поле)
+    @XStreamOmitField
+
     //добавили идентификатор для группы
     private int id = Integer.MAX_VALUE;
     private String name;

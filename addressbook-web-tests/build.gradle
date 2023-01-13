@@ -12,6 +12,9 @@ dependencies {
 
     //библиотека для командной строки
     implementation 'com.beust:jcommander:1.48'
+
+    //библиотека для сериализации
+    implementation 'com.thoughtworks.xstream:xstream:1.4.18'
 }
 
 test {

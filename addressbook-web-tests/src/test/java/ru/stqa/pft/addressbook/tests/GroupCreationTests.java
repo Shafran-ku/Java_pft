@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook.tests;
 
+import com.thoughtworks.xstream.XStream;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
@@ -9,27 +10,46 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+//перед запуском теста проверить строку параметров в конфигах GroupDataGenerator (-f src/test/resources/groups.xml -c 3 -d xml)
 
 public class GroupCreationTests extends TestBase {
     @DataProvider
     public Iterator<Object[]> validGroups() throws IOException {
-        List<Object[]> list = new ArrayList<Object[]>();
         //ридер для чтения данных
-        BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.csv")));
+        BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.xml")));
+
+        //десериализация формата xml при чтении
+        String xml = "";
+
+        //читаем строки
         String line = reader.readLine();
 
         //для чтения всех строк файла делаем цикл
-        //обработка прочитанных строк - каждую строку будем делить на части
         while (line != null) {
-            String[] split = line.split(";");
-            list.add(new Object[] {new GroupData().withName(split[0]).withHeader(split[1]).withFooter(split[2])});
+            xml += line;
             line = reader.readLine();
         }
-        return list.iterator();
+        //новый объект XStream
+        XStream xstream = new XStream();
+
+        //xstream должен обработать аннотации
+        xstream.processAnnotations(GroupData.class);
+
+        //доработка инициализации xstream из-за новых ограничений безопасности, которые появились недавно
+        xstream.allowTypes(new Class[]{GroupData.class});
+
+        //должен прочитать данные типа List<GroupData> и сохранить в переменную того же типа
+        List<GroupData> groups = (List<GroupData>) xstream.fromXML(xml);
+
+        //к каждому объекту нужно применить функцию, которая этот объект завернет в массив
+        //collectors из потока собирает список
+        //и у этого cписка берем итератор, который возвращаем
+        return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
     }
 
     //указали параметр dataProvider, кол-во принимаемых параметров = кол-ву параметров в тестовом наборе

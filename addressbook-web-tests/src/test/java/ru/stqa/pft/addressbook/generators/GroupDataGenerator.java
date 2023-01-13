@@ -3,6 +3,7 @@ package ru.stqa.pft.addressbook.generators;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.thoughtworks.xstream.XStream;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.io.File;
@@ -19,6 +20,9 @@ public class GroupDataGenerator {
 
     @Parameter(names = "-f", description = "Target file")
     public String file;
+
+    @Parameter(names = "-d", description = "Data format")
+    public String format ;
 
     //в качестве параметра принимает массив строк
     public static void main(String[] args) throws IOException {
@@ -45,11 +49,37 @@ public class GroupDataGenerator {
     private void run() throws IOException {
         //сохранение данных в файл
         List<GroupData> groups = generateGroups(count);
-        save(groups, new File(file));
+
+        //если формат csv то сохраняем csv, иначе xml
+        if (format.equals("csv")) {
+            saveAsCsv(groups, new File(file));
+        } else if (format.equals("xml")) {
+            saveAsXml(groups, new File(file));
+        } else {
+            System.out.println("Unrecognised format " + format);
+        }
+
+    }
+
+    //сохранение в формате xml с помощью библиотеки XStream
+    private void saveAsXml(List<GroupData> groups, File file) throws IOException {
+        XStream xstream = new XStream();
+
+        //сохраняем с нужным именем
+        //для класса GroupData прочитать подсказки, которые в нем написаны (аннотация)
+        xstream.processAnnotations(GroupData.class);
+
+        //указать объект, который хотим преобразовать в xml
+        String xml = xstream.toXML(groups);
+
+        Writer writer = new FileWriter(file);
+        writer.write(xml);
+        writer.close();
+
     }
 
     //запись в файл для всех групп (предусмотрели исключение (IOException))
-    private void save(List<GroupData> groups, File file) throws IOException {
+    private void saveAsCsv(List<GroupData> groups, File file) throws IOException {
         System.out.println(new File(".").getAbsolutePath());
         //открыть файл на запись
         Writer writer = new FileWriter(file);
