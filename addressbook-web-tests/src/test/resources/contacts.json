@@ -4,7 +4,7 @@
     "lastname": "lastname 0",
     "address": "address 0",
     "email": "email 0",
-    "homePhone": "homePhone 0",
+    "homePhone": "000-000",
     "group": "group 0"
   },
   {
@@ -12,7 +12,7 @@
     "lastname": "lastname 1",
     "address": "address 1",
     "email": "email 1",
-    "homePhone": "homePhone 1",
+    "homePhone": "111-111",
     "group": "group 1"
   },
   {
@@ -20,7 +20,7 @@
     "lastname": "lastname 2",
     "address": "address 2",
     "email": "email 2",
-    "homePhone": "homePhone 2",
+    "homePhone": "222-222",
     "group": "group 2"
   }
 ]
