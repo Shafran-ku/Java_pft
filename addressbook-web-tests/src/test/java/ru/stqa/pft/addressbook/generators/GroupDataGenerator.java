@@ -3,6 +3,8 @@ package ru.stqa.pft.addressbook.generators;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.thoughtworks.xstream.XStream;
 import ru.stqa.pft.addressbook.model.GroupData;
 
@@ -22,7 +24,7 @@ public class GroupDataGenerator {
     public String file;
 
     @Parameter(names = "-d", description = "Data format")
-    public String format ;
+    public String format;
 
     //в качестве параметра принимает массив строк
     public static void main(String[] args) throws IOException {
@@ -44,7 +46,7 @@ public class GroupDataGenerator {
         //запуск
         generator.run();
 
-     }
+    }
 
     private void run() throws IOException {
         //сохранение данных в файл
@@ -55,10 +57,22 @@ public class GroupDataGenerator {
             saveAsCsv(groups, new File(file));
         } else if (format.equals("xml")) {
             saveAsXml(groups, new File(file));
+        } else if (format.equals("json")) {
+            saveAsJson(groups, new File(file));
         } else {
             System.out.println("Unrecognised format " + format);
         }
 
+    }
+
+    private void saveAsJson(List<GroupData> groups, File file) throws IOException {
+        //setPrettyPrinting позволяет выводить красивый (отформатированный) json
+        //excludeFieldsWithoutExposeAnnotation() - пропускать все поля, которые не помечены аннотацией @Expose
+        Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+        String json = gson.toJson(groups);
+        Writer writer = new FileWriter(file);
+        writer.write(json);
+        writer.close();
     }
 
     //сохранение в формате xml с помощью библиотеки XStream

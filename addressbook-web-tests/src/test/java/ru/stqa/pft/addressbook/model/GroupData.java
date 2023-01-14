@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook.model;
 
+import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -8,13 +9,18 @@ import java.util.Objects;
 //аннотация для именования объектов в файле xml "group"
 @XStreamAlias("group")
 public class GroupData {
-    //указываем что ненужно сохранять в xml идентификатор id (@XStreamOmitField означает пропустить поле)
-    @XStreamOmitField
+    @XStreamOmitField //указываем что ненужно сохранять в xml идентификатор id (@XStreamOmitField означает пропустить поле)
 
     //добавили идентификатор для группы
     private int id = Integer.MAX_VALUE;
+
+    @Expose //пометка полей, которые оставляем в json
     private String name;
+
+    @Expose //пометка полей, которые оставляем в json
     private String header;
+
+    @Expose //пометка полей, которые оставляем в json
     private String footer;
 
     public int getId() {

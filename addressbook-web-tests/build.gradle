@@ -13,8 +13,11 @@ dependencies {
     //библиотека для командной строки
     implementation 'com.beust:jcommander:1.48'
 
-    //библиотека для сериализации
+    //библиотека для работы c XML
     implementation 'com.thoughtworks.xstream:xstream:1.4.18'
+
+    //библиотека для работы с JSON
+    implementation 'com.google.code.gson:gson:2.10'
 }
 
 test {
