@@ -22,63 +22,64 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class GroupCreationTests extends TestBase {
     @DataProvider //для XML
     public Iterator<Object[]> validGroupsFromXml() throws IOException {
-        //ридер для чтения данных
-        BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.xml")));
+        //ридер для чтения данных c конструкцией try - (инициализация) {использование}
+        try(BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.xml")))) {
 
-        //десериализация формата xml при чтении
-        String xml = "";
+            //десериализация формата xml при чтении
+            String xml = "";
 
-        //читаем строки
-        String line = reader.readLine();
+            //читаем строки
+            String line = reader.readLine();
 
-        //для чтения всех строк файла делаем цикл
-        while (line != null) {
-            xml += line;
-            line = reader.readLine();
+            //для чтения всех строк файла делаем цикл
+            while (line != null) {
+                xml += line;
+                line = reader.readLine();
+            }
+            //новый объект XStream
+            XStream xstream = new XStream();
+
+            //xstream должен обработать аннотации
+            xstream.processAnnotations(GroupData.class);
+
+            //доработка инициализации xstream из-за новых ограничений безопасности, которые появились недавно
+            xstream.allowTypes(new Class[]{GroupData.class});
+
+            //должен прочитать данные типа List<GroupData> и сохранить в переменную того же типа
+            List<GroupData> groups = (List<GroupData>) xstream.fromXML(xml);
+
+            //к каждому объекту нужно применить функцию, которая этот объект завернет в массив
+            //collectors из потока собирает список
+            //и у этого cписка берем итератор, который возвращаем
+            return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
         }
-        //новый объект XStream
-        XStream xstream = new XStream();
-
-        //xstream должен обработать аннотации
-        xstream.processAnnotations(GroupData.class);
-
-        //доработка инициализации xstream из-за новых ограничений безопасности, которые появились недавно
-        xstream.allowTypes(new Class[]{GroupData.class});
-
-        //должен прочитать данные типа List<GroupData> и сохранить в переменную того же типа
-        List<GroupData> groups = (List<GroupData>) xstream.fromXML(xml);
-
-        //к каждому объекту нужно применить функцию, которая этот объект завернет в массив
-        //collectors из потока собирает список
-        //и у этого cписка берем итератор, который возвращаем
-        return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
     }
 
     @DataProvider //для JSON
     public Iterator<Object[]> validGroupsFromJson() throws IOException {
-        //ридер для чтения данных
-        BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.json")));
+        //ридер для чтения данных c конструкцией try - (инициализация) {использование}
+        try(BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.json")))) {
+            //десериализация формата json: читаем содержимое файла в переменную, потом ее обрабатываем
+            String json = "";
 
-        //десериализация формата json: читаем содержимое файла в переменную, потом ее обрабатываем
-        String json = "";
+            //читаем строки
+            String line = reader.readLine();
 
-        //читаем строки
-        String line = reader.readLine();
+            //для чтения всех строк файла делаем цикл
+            while (line != null) {
+                json += line;
+                line = reader.readLine();
+            }
+            //новый объект
+            Gson gson = new Gson();
+            //TypeToken<List<GroupData>>(){}.getType() - для обработки типа данных, заключенных в <> (<GroupData>)
+            List<GroupData> groups = gson.fromJson(json, new TypeToken<List<GroupData>>(){}.getType());
 
-        //для чтения всех строк файла делаем цикл
-        while (line != null) {
-            json += line;
-            line = reader.readLine();
+            //к каждому объекту нужно применить функцию, которая этот объект завернет в массив
+            //collectors из потока собирает список
+            //и у этого cписка берем итератор, который возвращаем
+            return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
         }
-        //новый объект
-        Gson gson = new Gson();
-        //TypeToken<List<GroupData>>(){}.getType() - для обработки типа данных, заключенных в <> (<GroupData>)
-        List<GroupData> groups = gson.fromJson(json, new TypeToken<List<GroupData>>(){}.getType());
-
-        //к каждому объекту нужно применить функцию, которая этот объект завернет в массив
-        //collectors из потока собирает список
-        //и у этого cписка берем итератор, который возвращаем
-        return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
     }
 
     //указали параметр dataProvider, кол-во принимаемых параметров = кол-ву параметров в тестовом наборе

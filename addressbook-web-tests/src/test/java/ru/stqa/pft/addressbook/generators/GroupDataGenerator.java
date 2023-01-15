@@ -70,9 +70,11 @@ public class GroupDataGenerator {
         //excludeFieldsWithoutExposeAnnotation() - пропускать все поля, которые не помечены аннотацией @Expose
         Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(groups);
-        Writer writer = new FileWriter(file);
-        writer.write(json);
-        writer.close();
+
+        //инициализация + закрытие файла
+        try (Writer writer = new FileWriter(file)) {
+            writer.write(json);
+        }
     }
 
     //сохранение в формате xml с помощью библиотеки XStream
@@ -86,22 +88,21 @@ public class GroupDataGenerator {
         //указать объект, который хотим преобразовать в xml
         String xml = xstream.toXML(groups);
 
-        Writer writer = new FileWriter(file);
-        writer.write(xml);
-        writer.close();
-
+        //инициализация + закрытие файла
+        try(Writer writer = new FileWriter(file)) {
+            writer.write(xml);
+        }
     }
 
     //запись в файл для всех групп (предусмотрели исключение (IOException))
     private void saveAsCsv(List<GroupData> groups, File file) throws IOException {
         System.out.println(new File(".").getAbsolutePath());
         //открыть файл на запись
-        Writer writer = new FileWriter(file);
-        for (GroupData group : groups) {
-            writer.write(String.format("%s;%s;%s\n", group.getName(), group.getHeader(), group.getFooter()));
+        try(Writer writer = new FileWriter(file)) {
+            for (GroupData group : groups) {
+                writer.write(String.format("%s;%s;%s\n", group.getName(), group.getHeader(), group.getFooter()));
+            }
         }
-        //закрытие файла
-        writer.close();
     }
 
     private List<GroupData> generateGroups(int count) {
