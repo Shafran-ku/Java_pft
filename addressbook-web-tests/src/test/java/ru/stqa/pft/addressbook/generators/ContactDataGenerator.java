@@ -80,9 +80,11 @@ public class ContactDataGenerator {
         //excludeFieldsWithoutExposeAnnotation() - пропускать все поля, которые не помечены аннотацией @Expose
         Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(contacts);
-        Writer writer = new FileWriter(file);
-        writer.write(json);
-        writer.close();
+
+        //инициализация + закрытие файла
+        try(Writer writer = new FileWriter(file)){
+            writer.write(json);
+        }
     }
 }
 

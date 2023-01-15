@@ -23,29 +23,29 @@ public class ContactCreationTests extends TestBase {
 
     @DataProvider //для JSON
     public Iterator<Object[]> validContactsFromJson() throws IOException {
-        //ридер для чтения данных
-        BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contacts.json")));
+        //ридер для чтения данных c конструкцией try - (инициализация) {использование}
+        try(BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contacts.json")))) {
+            //десериализация формата json: читаем содержимое файла в переменную, потом ее обрабатываем
+            String json = "";
 
-        //десериализация формата json: читаем содержимое файла в переменную, потом ее обрабатываем
-        String json = "";
+            //читаем строки
+            String line = reader.readLine();
 
-        //читаем строки
-        String line = reader.readLine();
+            //для чтения всех строк файла делаем цикл
+            while (line != null) {
+                json += line;
+                line = reader.readLine();
+            }
+            //новый объект
+            Gson gson = new Gson();
+            //TypeToken<List<ContactData>>(){}.getType() - для обработки типа данных, заключенных в <> (<ContactData>)
+            List<ContactData> groups = gson.fromJson(json, new TypeToken<List<ContactData>>(){}.getType());
 
-        //для чтения всех строк файла делаем цикл
-        while (line != null) {
-            json += line;
-            line = reader.readLine();
+            //к каждому объекту нужно применить функцию, которая этот объект завернет в массив
+            //collectors из потока собирает список
+            //и у этого cписка берем итератор, который возвращаем
+            return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
         }
-        //новый объект
-        Gson gson = new Gson();
-        //TypeToken<List<ContactData>>(){}.getType() - для обработки типа данных, заключенных в <> (<ContactData>)
-        List<ContactData> groups = gson.fromJson(json, new TypeToken<List<ContactData>>(){}.getType());
-
-        //к каждому объекту нужно применить функцию, которая этот объект завернет в массив
-        //collectors из потока собирает список
-        //и у этого cписка берем итератор, который возвращаем
-        return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
     }
 
 
