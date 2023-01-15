@@ -20,6 +20,20 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10'
 }
 
-test {
-    useTestNG()
+//указали использовать фреймворк TestNG
+//запуск тестового набора для групп
+task testGroups(type: Test) {
+    useTestNG {
+        //указали какой конфиг тестового набора должны использовать
+        suites 'src/test/resources/testng-groups.xml'
+    }
+}
+
+//указали использовать фреймворк TestNG
+//запуск тестового набора для групп
+task testContacts(type: Test) {
+    useTestNG {
+        //указали какой конфиг тестового набора должны использовать
+        suites 'src/test/resources/testng-contacts.xml'
+    }
 }
