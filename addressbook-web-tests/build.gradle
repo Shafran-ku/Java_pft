@@ -10,14 +10,17 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:4.3.0'
     implementation 'org.hamcrest:java-hamcrest:2.0.0.0'
 
-    //библиотека для командной строки
+    //для командной строки
     implementation 'com.beust:jcommander:1.48'
 
-    //библиотека для работы c XML
+    //для работы c XML
     implementation 'com.thoughtworks.xstream:xstream:1.4.18'
 
-    //библиотека для работы с JSON
+    //для работы с JSON
     implementation 'com.google.code.gson:gson:2.10'
+
+    //для работы с логами
+    implementation 'ch.qos.logback:logback-classic:1.1.5'
 }
 
 //указали использовать фреймворк TestNG
