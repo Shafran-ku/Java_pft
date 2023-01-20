@@ -9,18 +9,11 @@ dependencies {
     //implementation 'org.seleniumhq.selenium:selenium-java:4.7.0'
     implementation 'org.seleniumhq.selenium:selenium-java:4.3.0'
     implementation 'org.hamcrest:java-hamcrest:2.0.0.0'
-
-    //для командной строки
-    implementation 'com.beust:jcommander:1.48'
-
-    //для работы c XML
-    implementation 'com.thoughtworks.xstream:xstream:1.4.18'
-
-    //для работы с JSON
-    implementation 'com.google.code.gson:gson:2.10'
-
-    //для работы с логами
-    implementation 'ch.qos.logback:logback-classic:1.1.5'
+    implementation 'com.beust:jcommander:1.48'                  //для командной строки
+    implementation 'com.thoughtworks.xstream:xstream:1.4.18'    //для работы c XML
+    implementation 'com.google.code.gson:gson:2.10'             //для работы с JSON
+    implementation 'ch.qos.logback:logback-classic:1.1.5'       //для работы с логами
+    implementation 'mysql:mysql-connector-java:5.1.48'          //для работы с БД MySql
 }
 
 //указали использовать фреймворк TestNG
