@@ -37,7 +37,6 @@ public class DbConnectionTest {
             //вывод результатов
             System.out.println(groups);
 
-
         } catch (SQLException ex) {
             // handle any errors
             System.out.println("SQLException: " + ex.getMessage());
