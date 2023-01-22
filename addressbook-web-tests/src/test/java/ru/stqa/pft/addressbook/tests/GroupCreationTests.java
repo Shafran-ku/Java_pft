@@ -94,13 +94,13 @@ public class GroupCreationTests extends TestBase {
 
         //основной тест
         app.goTo().groupPage();
-        Groups before = app.group().all();
+        Groups before = app.db().groups();
         app.group().create(group);
 
         //сравниваем размеры списков
         assertThat(app.group().count(), equalTo(before.size() + 1));
 
-        Groups after = app.group().all();
+        Groups after = app.db().groups();
 
         //анонимная ф-ия в качестве параметра принимает группу, а в качестве рез-та выдает идент-ор группы
         assertThat(after, equalTo(
@@ -110,13 +110,13 @@ public class GroupCreationTests extends TestBase {
     @Test(enabled = false)
     public void testBadGroupCreation() throws Exception {
         app.goTo().groupPage();
-        Groups before = app.group().all();
+        Groups before = app.db().groups();
         GroupData group = new GroupData().withName("test2   ' ");
         app.group().create(group);
 
         //сравниваем размеры списков
         assertThat(app.group().count(), equalTo(before.size()));
-        Groups after = app.group().all();
+        Groups after = app.db().groups();
         assertThat(after, equalTo(before));
     }
 
