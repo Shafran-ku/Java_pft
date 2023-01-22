@@ -21,8 +21,8 @@ public class GroupDeletionTests extends TestBase {
     @BeforeMethod
     public void ensurePreconditions() {
         app.goTo().groupPage();
-        //проверка наличия хоть одной группы; если нет - создать
-        if (app.group().all().size() ==0) {
+        //проверка наличия хоть одной группы в БД; если нет - создать
+        if (app.db().groups().size() ==0) {
             app.group().create(new GroupData().withName("test1"));
         }
     }
@@ -31,7 +31,7 @@ public class GroupDeletionTests extends TestBase {
     public void testGroupDeletion() throws Exception {
 
         //будет содержать множество элементов после до того как будет создана группа
-        Groups before = app.group().all();
+        Groups before = app.db().groups();
         GroupData deletedGroup = before.iterator().next();
         app.group().delete(deletedGroup);
 
@@ -39,7 +39,7 @@ public class GroupDeletionTests extends TestBase {
         assertThat(app.group().count(), equalTo(before.size() - 1));
 
         //будет содержать множество элементов после того как будет создана группа
-        Groups after = app.group().all();
+        Groups after = app.db().groups();
 
         assertThat(after, equalTo(before.without(deletedGroup)));
     }

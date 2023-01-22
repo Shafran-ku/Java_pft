@@ -25,7 +25,7 @@ public class TestBase {
 
     static {
         try {
-            app = new ApplicationManager(System.getProperty("browser", BrowserType.CHROME));
+            app = new ApplicationManager(System.getProperty("browser", BrowserType.FIREFOX));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

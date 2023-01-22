@@ -24,14 +24,11 @@ public class DbHelper {
         sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
 
-    //поле для получения списка груп
+    //метод для получения списка груп
     public Groups groups() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         List<GroupData> result = session.createQuery("from GroupData").list();
-        for (GroupData contact :  result) {
-            System.out.println(contact);
-        }
         session.getTransaction().commit();
         session.close();
         return new Groups(result);
@@ -39,6 +36,6 @@ public class DbHelper {
     }
 
 
-//поле для получения списка контактов
+//метод для получения списка контактов
 
 }
