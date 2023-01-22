@@ -21,9 +21,10 @@ public class GroupModificationTests extends TestBase{
     //выполнение предусловия
     @BeforeMethod
     public void ensurePreconditions() {
-        app.goTo().groupPage();
-        //проверка наличия хоть одной группы; если нет - создать
-        if (app.group().all().size() == 0) {
+        //проверка наличия хоть одной группы в БД; если нет - создать
+        if (app.db().groups().size() == 0) {
+            app.goTo().groupPage();
+            //создание группы
             app.group().create(new GroupData().withName("test1"));
         }
     }
@@ -31,21 +32,22 @@ public class GroupModificationTests extends TestBase{
     @Test
     public void testGroupModification() {
 
-        //будет содержать множество элементов после того как будет создана группа
-        Groups before = app.group().all();
+        //будет содержать множество элементов до того как будет создана группа
+        Groups before = app.db().groups();
         GroupData modifiedGroup = before.iterator().next();
 
         //при модификации группы указываем новое имя, новые header, новый footer, а идентификатор сохраняем старый
         GroupData group = new GroupData()
                 .withId(modifiedGroup.getId()).withName("test1").withHeader("test2").withFooter("test3");
+        app.goTo().groupPage();
         //модификация группы
         app.group().modify(group);
 
-                //сравниваем размеры
+        //сравниваем размеры
         assertThat(app.group().count(), equalTo(before.size()));
 
-        //будет содержать множество элементов после того как будет создана группа
-        Groups after = app.group().all();
+        //будет содержать множество элементов после того как будет создана группа (получаем из БД)
+        Groups after = app.db().groups();
 
         assertThat(after, equalTo(before.without(modifiedGroup).withAdded(group)));
     }

@@ -21,6 +21,7 @@ public class ApplicationManager {
     private NavigationHelper navigationHelper;
     private GroupHelper groupHelper;
     private String browser;
+    private DbHelper dbHelper;
 
     public ApplicationManager(String browser) throws IOException {
         this.browser = browser;
@@ -35,6 +36,9 @@ public class ApplicationManager {
 
         //вместо %s будет подставлен target
         properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
+
+        //иниициализация помощника
+        dbHelper = new DbHelper();
 
         if (browser.equals(BrowserType.FIREFOX)) {
             wd = new FirefoxDriver();
@@ -72,4 +76,9 @@ public class ApplicationManager {
     public ContactHelper contact() {
         return contactHelper;
     }
+
+    public DbHelper db() {
+        return dbHelper;
+    }
+
 }
