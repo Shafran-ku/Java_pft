@@ -1,47 +1,86 @@
 package ru.stqa.pft.addressbook.model;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 import java.util.Objects;
 
+@Entity                                 //аннотация объявляет класс ContactData привязанным к БД
+@Table(name = "addressbook")            //указали (name = "addressbook") т.к. имя таблицы не совпадает с именем класса (ContactData)
 public class ContactData {
+    @Id
+    @Column(name = "id")
     private int id = Integer.MAX_VALUE;
 
+    @Column(name = "firstname")
     @Expose //пометка полей, которые оставляем в json
     private String firstname;
 
+    @Column(name = "lastname")
     @Expose
     private String lastname;
 
     @Expose
+    @Type(type = "text")            //указали тип полей, которые не могут преобразоваться автоматически
     private String address;
 
+    @Transient
+    private String allEmail;
+
+    @Transient
     @Expose
     private String email;
 
+    @Transient
     private String email2;
+
+    @Transient
     private String email3;
 
+    @Column(name = "home")
+    @Type(type = "text")            //указали тип полей, которые не могут преобразоваться автоматически
     @Expose
     private String homePhone;
 
+    @Transient                      //Transient - поле будет пропущено (т.к. в БД нет привязки к группе)
     @Expose
     private String group;
 
+    @Column(name = "mobile")
+    @Type(type = "text")
     private String mobilePhone;
+
+    @Column(name = "work")
+    @Type(type = "text")            //указали тип полей, которые не могут преобразоваться автоматически
     private String workPhone;
+
+    @Type(type = "text")
     private String phone2;
+
+    @Transient
     private String allPhones;
-    private String allEmail;
-    private File photo;
+
+    @Override
+    public String toString() {
+        return "ContactData{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                '}';
+    }
+
+    @Column(name = "photo")
+    @Type(type = "text")
+    private String photo;
 
     public File getPhoto() {
-        return photo;
+        return new File(photo);
     }
 
     public ContactData withPhoto(File photo) {
-        this.photo = photo;
+        this.photo = photo.getPath();
         return this;
     }
 
@@ -172,15 +211,6 @@ public class ContactData {
 
     public int getId() {
         return id;
-    }
-
-    @Override
-    public String toString() {
-        return "ContactData{" +
-                "id='" + id + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                '}';
     }
 
     @Override
