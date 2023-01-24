@@ -37,7 +37,7 @@ public class ApplicationManager {
         //вместо %s будет подставлен target
         properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
 
-        //иниициализация помощника
+        //иниициализация помощника работы c БД
         dbHelper = new DbHelper();
 
         if (browser.equals(BrowserType.FIREFOX)) {

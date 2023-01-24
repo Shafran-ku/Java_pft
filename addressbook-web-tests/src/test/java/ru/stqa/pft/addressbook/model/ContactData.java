@@ -75,6 +75,19 @@ public class ContactData {
     @Type(type = "text")
     private String photo;
 
+    @Override                               //делается через Generate → Equals and hashCode
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContactData that = (ContactData) o;
+        return id == that.id && Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname);
+    }
+
+    @Override                               //делается через Generate → Equals and hashCode
+    public int hashCode() {
+        return Objects.hash(id, firstname, lastname);
+    }
+
     public File getPhoto() {
         return new File(photo);
     }
@@ -213,16 +226,4 @@ public class ContactData {
         return id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContactData that = (ContactData) o;
-        return id == that.id && Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstname, lastname);
-    }
 }

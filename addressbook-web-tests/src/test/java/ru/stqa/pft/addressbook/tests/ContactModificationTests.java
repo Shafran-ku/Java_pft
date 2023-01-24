@@ -23,10 +23,10 @@ public class ContactModificationTests extends TestBase {
         app.goTo().HomePage();
 
         //проверка есть ли контакт, если нет то проверка наличия группы
-        if (app.contact().all().size() == 0) {
+        if (app.db().contacts().size() == 0) {
             app.goTo().groupPage();
             //проверка есть ли хоть одна группа, если нет - создаем
-            if (app.group().list().size() == 0) {
+            if (app.db().groups().size() == 0) {
                 app.group().create(new GroupData().withName("test1"));
             }
             //если нет контакта, но есть группа, создаем контакт
@@ -39,7 +39,7 @@ public class ContactModificationTests extends TestBase {
     public void testContactModification() {
 
         // до модификации
-        Contacts before = app.contact().all();
+        Contacts before = app.db().contacts();
 
         ContactData modifiedContact = before.iterator().next();
 
@@ -54,7 +54,7 @@ public class ContactModificationTests extends TestBase {
         assertThat(app.contact().count(), equalTo(before.size()));
 
         //после того как будет модификация
-        Contacts after = app.contact().all();
+        Contacts after = app.db().contacts();
 
         //сравниваем по содержимому
         assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));

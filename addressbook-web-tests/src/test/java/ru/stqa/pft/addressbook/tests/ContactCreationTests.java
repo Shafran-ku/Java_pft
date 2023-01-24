@@ -66,7 +66,7 @@ public class ContactCreationTests extends TestBase {
         //Основной тест
 
         //множество элементов до добавления
-        Contacts before = app.contact().all();
+        Contacts before = app.db().contacts();
 
         //переменная для картинки
         File photo= new File("src/test/resources/stru.png");
@@ -83,7 +83,7 @@ public class ContactCreationTests extends TestBase {
         assertThat(app.contact().count(), equalTo(before.size() + 1));
 
         //множество элементов после того как будет создана новая группа
-        Contacts after = app.contact().all();
+        Contacts after = app.db().contacts();
 
         //сравниваем по содержимому (контакты сравниваеются по firstname и lastname, id не учитываются
         assertThat(after, equalTo(before.withAdded(
