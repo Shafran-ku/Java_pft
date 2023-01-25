@@ -1,5 +1,7 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.openqa.selenium.remote.Browser;
 import org.openqa.selenium.remote.BrowserType;
 import org.slf4j.Logger;
@@ -9,10 +11,16 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
+import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 //перед каждым тестовым методом инициализирует объект типа ApplicationManager, после того как метод отработал - разрушает его
 public class TestBase {
@@ -58,6 +66,28 @@ public class TestBase {
         logger.info("Stop test " + m.getName());
 
     }
+
+    public void verifyGroupListInUI() {
+
+        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
+        //Boolean.getBoolean() - получает свойство и преобразует его в булево
+
+        if (Boolean.getBoolean("verifyUI")) {
+            //множество загружаемые из БД
+            Groups dbGroups = app.db().groups();
+
+            //множество загружаемый из UI
+            Groups uiGroups = app.group().all();
+
+            //и сравниваем оба множества
+            //из множества групп из БД удаляем (map) инф-ию о header и footer, оставляем только id и GroupName, как в UI (collect)
+            assertThat(uiGroups, equalTo(dbGroups.stream()
+                    .map((g) -> new GroupData().withId(g.getId()).withName(g.getName()))
+                    .collect(Collectors.toSet())));
+        }
+    }
+
+
 
 
 }
