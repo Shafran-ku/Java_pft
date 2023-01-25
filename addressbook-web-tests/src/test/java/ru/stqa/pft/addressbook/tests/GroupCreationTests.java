@@ -118,6 +118,10 @@ public class GroupCreationTests extends TestBase {
         assertThat(app.group().count(), equalTo(before.size()));
         Groups after = app.db().groups();
         assertThat(after, equalTo(before));
+
+        //проверка загрузки данных из UI для тестов,
+        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
+        verifyGroupListInUI();
     }
 
 }

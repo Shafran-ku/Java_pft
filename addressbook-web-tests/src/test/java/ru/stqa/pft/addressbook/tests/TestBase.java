@@ -11,6 +11,8 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
+import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
@@ -68,10 +70,8 @@ public class TestBase {
     }
 
     public void verifyGroupListInUI() {
-
         //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
         //Boolean.getBoolean() - получает свойство и преобразует его в булево
-
         if (Boolean.getBoolean("verifyUI")) {
             //множество загружаемые из БД
             Groups dbGroups = app.db().groups();
@@ -86,8 +86,4 @@ public class TestBase {
                     .collect(Collectors.toSet())));
         }
     }
-
-
-
-
 }

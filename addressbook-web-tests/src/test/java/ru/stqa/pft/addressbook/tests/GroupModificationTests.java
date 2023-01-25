@@ -51,6 +51,8 @@ public class GroupModificationTests extends TestBase{
 
         assertThat(after, equalTo(before.without(modifiedGroup).withAdded(group)));
 
+        //проверка загрузки данных из UI для тестов,
+        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
         verifyGroupListInUI();
     }
 
