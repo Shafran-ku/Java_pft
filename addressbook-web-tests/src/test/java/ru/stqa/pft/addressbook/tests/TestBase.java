@@ -63,7 +63,7 @@ public class TestBase {
 
     //выводится сообщение что тестовый метод завершил работу
     @AfterMethod(alwaysRun = true)
-    public void logTestStop(Method m){
+    public void logTestStop(Method m) {
         //тормозим логгер
         logger.info("Stop test " + m.getName());
 
@@ -86,4 +86,25 @@ public class TestBase {
                     .collect(Collectors.toSet())));
         }
     }
+
+    public void verifyContactListInUI() {
+        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
+        //Boolean.getBoolean() - получает свойство и преобразует его в булево
+        if (Boolean.getBoolean("verifyUI")) {
+            //множество загружаемые из БД
+            Contacts dbContacts = app.db().contacts();
+
+            //множество загружаемый из UI
+            Contacts uiContacts = app.contact().all();
+
+            //и сравниваем оба множества
+            //из множества контактов из БД удаляем (map) ненужную инф-ию, оставляем только id,Firstname и Lastname, как в UI (collect)
+            assertThat(uiContacts, equalTo(dbContacts.stream()
+                    .map((g) -> new ContactData()
+                            .withId(g.getId()).withFirstname(g.getFirstname()).withLastname(g.getLastname())
+                            .withAddress(g.getAddress()).withEmail(g.getEmail()))
+                    .collect(Collectors.toSet())));
+        }
+    }
+
 }

@@ -88,6 +88,10 @@ public class ContactCreationTests extends TestBase {
         //сравниваем по содержимому (контакты сравниваеются по firstname и lastname, id не учитываются
         assertThat(after, equalTo(before.withAdded(
                 contact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+
+        //проверка загрузки данных из UI для тестов,
+        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
+        verifyContactListInUI();
     }
 
     @Test(enabled = false)

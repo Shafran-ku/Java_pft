@@ -21,7 +21,7 @@ public class ContactDeletionTests extends TestBase {
         app.goTo().HomePage();
 
         //проверка наличия контакта для удаления: если нечего удалять, то создать контакт
-        if (app.contact().all().size() == 0)  {
+        if (app.db().contacts().size() == 0)  {
             app.contact().create(new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
                     .withEmail("den@mail.ru").withHomePhone("+79188888777").withGroup("test1"));
         }
@@ -45,6 +45,9 @@ public class ContactDeletionTests extends TestBase {
         //сравниваем по содержимому
         assertThat(after, equalTo(before.without(deletedContact)));
 
+        //проверка загрузки данных из UI для тестов,
+        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
+        verifyContactListInUI();
        }
 
 }

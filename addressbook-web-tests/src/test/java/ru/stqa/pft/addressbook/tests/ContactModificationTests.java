@@ -58,6 +58,10 @@ public class ContactModificationTests extends TestBase {
 
         //сравниваем по содержимому
         assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
+
+        //проверка загрузки данных из UI для тестов,
+        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
+        verifyContactListInUI();
     }
 
 

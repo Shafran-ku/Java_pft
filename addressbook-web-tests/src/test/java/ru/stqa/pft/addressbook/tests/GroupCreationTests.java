@@ -105,6 +105,10 @@ public class GroupCreationTests extends TestBase {
         //анонимная ф-ия в качестве параметра принимает группу, а в качестве рез-та выдает идент-ор группы
         assertThat(after, equalTo(
                 before.withAdded(group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+
+        //проверка загрузки данных из UI для тестов,
+        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
+        verifyGroupListInUI();
     }
 
     @Test(enabled = false)
@@ -118,10 +122,6 @@ public class GroupCreationTests extends TestBase {
         assertThat(app.group().count(), equalTo(before.size()));
         Groups after = app.db().groups();
         assertThat(after, equalTo(before));
-
-        //проверка загрузки данных из UI для тестов,
-        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
-        verifyGroupListInUI();
     }
 
 }
