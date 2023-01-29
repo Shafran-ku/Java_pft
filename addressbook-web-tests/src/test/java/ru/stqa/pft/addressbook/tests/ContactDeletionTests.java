@@ -16,16 +16,19 @@ import static org.testng.Assert.assertEquals;
 
 public class ContactDeletionTests extends TestBase {
     //предусловия теста
+
     @BeforeMethod
     public void ensurePreconditions() {
         app.goTo().HomePage();
 
         //проверка наличия контакта для удаления: если нечего удалять, то создать контакт
+
         if (app.db().contacts().size() == 0)  {
             app.contact().create(new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
-                    .withEmail("den@mail.ru").withHomePhone("+79188888777").withGroup("test1"));
+                    .withEmail("den@mail.ru").withHomePhone("+79188888777"));
         }
     }
+
 
     @Test
     public void testContactDeletion() {

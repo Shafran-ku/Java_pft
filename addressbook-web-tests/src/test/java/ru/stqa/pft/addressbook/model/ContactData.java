@@ -5,7 +5,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity                                 //аннотация объявляет класс ContactData привязанным к БД
 @Table(name = "addressbook")            //указали (name = "addressbook") т.к. имя таблицы не совпадает с именем класса (ContactData)
@@ -44,10 +46,6 @@ public class ContactData {
     @Expose
     private String homePhone;
 
-    @Transient                      //Transient - поле будет пропущено (т.к. в БД нет привязки к группе)
-    @Expose
-    private String group;
-
     @Column(name = "mobile")
     @Type(type = "text")
     private String mobilePhone;
@@ -61,6 +59,17 @@ public class ContactData {
 
     @Transient
     private String allPhones;
+
+    //@JoinTable:
+    //  name = "address_in_groups" - в качестве связующей указали таблицу
+    //  joinColumns = @JoinColumn(name = "id") - указывает на объект текущего класса- на контакты
+    //  inverseJoinColumns = @JoinColumn(name = "group_id") - указывает на объект другого типа - на группу
+    //FetchType.EAGER - из БД извлекается много инф-ии за один заход
+    @ManyToMany(fetch = FetchType.EAGER)
+    //описываем связь между объектами 2 типов
+    @JoinTable(name = "address_in_groups",
+            joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Set<GroupData> groups = new HashSet<GroupData>();
 
     @Override
     public String toString() {
@@ -145,13 +154,17 @@ public class ContactData {
         return workPhone;
     }
 
-
     public String getPhone2() {
         return phone2;
     }
 
-    public String getGroup() {
-        return group;
+    //новый Groups для ManyToMany
+    public Groups getGroups() {
+        return new Groups(groups);
+    }
+
+    public void setGroups(Set<GroupData> groups) {
+        this.groups = groups;
     }
 
     public ContactData withId(int id) {
@@ -209,20 +222,13 @@ public class ContactData {
         return this;
     }
 
-
     public ContactData withPhone2(String phone2) {
         this.phone2 = phone2;
         return this;
     }
 
-
     public ContactData withAllPhones(String allPhones) {
         this.allPhones = allPhones;
-        return this;
-    }
-
-    public ContactData withGroup(String group) {
-        this.group = group;
         return this;
     }
 
@@ -230,4 +236,9 @@ public class ContactData {
         return id;
     }
 
+    //помечаем контакт как добавленый в группу
+    public ContactData inGroup(GroupData group) {
+        groups.add(group);
+        return this;
+    }
 }

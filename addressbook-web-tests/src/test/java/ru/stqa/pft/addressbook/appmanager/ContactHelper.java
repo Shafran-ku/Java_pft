@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
 
@@ -38,14 +39,16 @@ public class ContactHelper extends HelperBase {
         //добавляем также фото с полным путем к файлу
         attach(By.name("photo"),contactData.getPhoto());
 
-
         //Если это создание контакта, то проверяем наличие выпадающего списка групп "new_group"
         //+проверка: если модификация контакта, то выпадающего списка групп быть не должно
         //если это форма создания
         if (creation) {
-            if (isElementPresent(By.name(contactData.getGroup()))) {
+            if (contactData.getGroups().size() > 0) {
+                //проверка если указана 1 группа, то добавляем, если !=1 то не добавляем
+                Assert.assertTrue(contactData.getGroups().size() == 1);
                 //выбрать из списка групп какой нибудь элемент
-                new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+                //iterator().next().getName()- извлекаем какую то группу и берем у нее имя
+                new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
             } else new Select(wd.findElement(By.name("new_group"))).getFirstSelectedOption();
             //иначе проверить отсутствие выпадающего списка "new_group"
         } else Assert.assertFalse(isElementPresent(By.name("new_group")));
@@ -195,6 +198,25 @@ public class ContactHelper extends HelperBase {
         //поиск по идентификатору в ссылке на редактирование, и нажатие на карандашик (%s - здесь подставится значение)
         //+ здесь использован метод String.format - делает подстановку значений внутрь строки (вместо %s подставится значение
         wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
+    }
+
+    //добавление в группу
+
+    public void initAdditionToGroup(ContactData contact, GroupData group) {
+        selectContactById(contact.getId());
+        addToGroup(group);
+    }
+
+    private void addToGroup(GroupData group) {
+        click(By.name("to_group"));
+        new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(group.getName());
+        click(By.name("add"));
+    }
+
+    //проверка что добавлено
+    public void checkAdded(GroupData group) {
+        click(By.name("group"));
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
     }
 }
 

@@ -6,6 +6,7 @@ import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
 
 import java.io.BufferedReader;
@@ -48,7 +49,6 @@ public class ContactCreationTests extends TestBase {
         }
     }
 
-
     //предусловия теста
     @BeforeMethod
     public void ensurePreconditions() {
@@ -64,6 +64,9 @@ public class ContactCreationTests extends TestBase {
     @Test(dataProvider = "validContactsFromJson")
     public void testContactCreation(ContactData contact) {
         //Основной тест
+
+        //получаем все группы
+        Groups groups = app.db().groups();
 
         //множество элементов до добавления
         Contacts before = app.db().contacts();
@@ -98,18 +101,18 @@ public class ContactCreationTests extends TestBase {
     public void testBadContactCreation() throws Exception {
 
         //множество элементов до добавления
-        Contacts before = app.contact().all();
+        Contacts before = app.contact().all();  //Todo Contacts before = app.db().contacts();
 
         //сделали переменную
-        ContactData contact = new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
-                .withEmail("den@mail.ru").withHomePhone("+79188888777").withGroup("test1");
-        app.contact().create(contact);
+        //ContactData contact = new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
+        //        .withEmail("den@mail.ru").withHomePhone("+79188888777").withGroup("test1");
+        //app.contact().create(contact);
 
         //сравнение размера до и после добавления
         assertThat(app.contact().count(), equalTo(before.size()));
 
         //множество элементов после того как будет создана новая группа
-        Contacts after = app.contact().all();
+        Contacts after = app.contact().all();   //todo Contacts after = app.db().contacts();
 
         //сравниваем по содержимому (контакты сравниваеются по firstname и lastname, id не учитываются
         assertThat(after, equalTo(before));

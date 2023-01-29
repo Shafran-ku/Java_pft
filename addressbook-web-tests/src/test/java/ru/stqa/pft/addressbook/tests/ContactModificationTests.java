@@ -31,9 +31,10 @@ public class ContactModificationTests extends TestBase {
             }
             //если нет контакта, но есть группа, создаем контакт
             app.contact().create(new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
-                    .withEmail("den@mail.ru").withHomePhone("+79188888777").withGroup("test1"));
+                    .withEmail("den@mail.ru").withHomePhone("+79188888777"));
         }
     }
+
 
     @Test
     public void testContactModification() {

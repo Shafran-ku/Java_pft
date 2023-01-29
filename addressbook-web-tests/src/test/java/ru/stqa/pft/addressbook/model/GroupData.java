@@ -6,11 +6,10 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.hibernate.annotations.Type;
 import org.testng.annotations.Test;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @XStreamAlias("group")
 
@@ -39,6 +38,23 @@ public class GroupData {
     @Column(name = "group_footer")
     @Type(type = "text")        //нужна подсказка для правильного приведения типа
     private String footer;
+
+
+    //mappedBy - в парном классе ищеться свойство groups и оттуда берется связь
+    @ManyToMany(mappedBy = "groups")
+    private Set<ContactData> contacts = new HashSet<ContactData>();
+
+    /*
+    public Set<ContactData> getContacts() {
+        return contacts;                        //в HW сделать преобразования new contacts и вернуть полученные значения
+    }
+     */
+
+    //новый Contacts для ManyToMany
+    public Contacts getContacts() {
+        return new Contacts(contacts);
+    }
+
 
     public int getId() {
         return id;
