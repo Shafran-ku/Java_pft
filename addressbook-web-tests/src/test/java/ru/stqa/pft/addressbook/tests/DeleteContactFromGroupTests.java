@@ -11,7 +11,7 @@ import ru.stqa.pft.addressbook.model.GroupData;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class DeleteContactFromGroup extends TestBase {
+public class DeleteContactFromGroupTests extends TestBase {
 
     @BeforeMethod
     public void ensurePreconditions() {
@@ -38,7 +38,7 @@ public class DeleteContactFromGroup extends TestBase {
         //выбор контакта
         ContactData selectContact = before.iterator().next();
 
-        //новая группа "test 1"
+        //новая группа с именем "test 1"
         GroupData group = new GroupData().withName("test 1");
         app.contact().selectGroup(group);
 

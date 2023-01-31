@@ -201,12 +201,12 @@ public class ContactHelper extends HelperBase {
     }
 
     //добавление в группу
-
     public void initAdditionToGroup(ContactData contact, GroupData group) {
         selectContactById(contact.getId());
         addToGroup(group);
     }
 
+    //добавление контакта в группу
     public void addToGroup(GroupData group) {
         click(By.name("to_group"));
         new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(group.getName());

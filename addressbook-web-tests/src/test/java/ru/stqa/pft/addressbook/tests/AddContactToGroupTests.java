@@ -5,11 +5,12 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class AddContactToGroup extends TestBase {
+public class AddContactToGroupTests extends TestBase {
 
     //предусловия теста
     @BeforeMethod
@@ -29,20 +30,34 @@ public class AddContactToGroup extends TestBase {
 
     @Test
     public void testAddContactToGroup() {
+        //до добавления контакта из группы
         Contacts before = app.db().contacts();
+
+        //данные контакта для добавления
+        ContactData selectedContact = before.iterator().next();
+
+        //кол-во групп
+        GroupData selectedGroup;
+        Groups groups = app.db().groups();
+
+        //проверка если контакт уже есть в существующей группе(ах) то создать новую, иначе использовать существующую
+        if (groups.size() == selectedContact.getGroups().size()) {
+            GroupData newGroup = new GroupData().withName("test 2");
+            selectedGroup = newGroup;
+            app.goTo().groupPage();
+            app.group().create(newGroup);
+
+        } else selectedGroup = groups.iterator().next();
+
         app.goTo().HomePage();
 
-        //выбор контакта
-        ContactData selectContact = before.iterator().next();
-        ContactData contact = new ContactData().withId(selectContact.getId());
-
-        //выбор группы
-        GroupData group = new GroupData().withName("test 1");
-        app.contact().initAdditionToGroup(contact, group);
+        //добавить контакт в созданную группу
+        app.contact().initAdditionToGroup(selectedContact, selectedGroup);
 
         app.goTo().HomePage();
 
-        app.contact().checkAdded(group);
+        //проверить что контакт в группе
+        app.contact().checkContactInGroup(selectedGroup);
         Contacts after = app.db().contacts();
 
         assertThat(after, equalTo(before));
