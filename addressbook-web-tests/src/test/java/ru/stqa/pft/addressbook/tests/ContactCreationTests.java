@@ -101,7 +101,7 @@ public class ContactCreationTests extends TestBase {
     public void testBadContactCreation() throws Exception {
 
         //множество элементов до добавления
-        Contacts before = app.contact().all();  //Todo Contacts before = app.db().contacts();
+        Contacts before = app.contact().all();
 
         //сделали переменную
         //ContactData contact = new ContactData().withFirstname("Den").withLastname("Kh.").withAddress("Suvorova st.")
@@ -112,7 +112,7 @@ public class ContactCreationTests extends TestBase {
         assertThat(app.contact().count(), equalTo(before.size()));
 
         //множество элементов после того как будет создана новая группа
-        Contacts after = app.contact().all();   //todo Contacts after = app.db().contacts();
+        Contacts after = app.contact().all();
 
         //сравниваем по содержимому (контакты сравниваеются по firstname и lastname, id не учитываются
         assertThat(after, equalTo(before));

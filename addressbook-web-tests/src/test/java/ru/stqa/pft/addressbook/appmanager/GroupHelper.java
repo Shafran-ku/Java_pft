@@ -133,7 +133,7 @@ public class GroupHelper extends HelperBase {
         return new Groups(groupCache);
     }
 
-    //проверка наличия группы test1 при создании контакта
+    //проверка наличия группы при создании контакта
     public boolean isAnyGroupExist() {
         return isElementPresent(By.name("selected[]"));
     }

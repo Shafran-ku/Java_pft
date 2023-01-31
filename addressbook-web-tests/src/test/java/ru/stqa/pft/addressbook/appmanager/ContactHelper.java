@@ -207,7 +207,7 @@ public class ContactHelper extends HelperBase {
         addToGroup(group);
     }
 
-    private void addToGroup(GroupData group) {
+    public void addToGroup(GroupData group) {
         click(By.name("to_group"));
         new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(group.getName());
         click(By.name("add"));
@@ -215,6 +215,29 @@ public class ContactHelper extends HelperBase {
 
     //проверка что добавлено
     public void checkAdded(GroupData group) {
+        click(By.name("group"));
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
+    }
+
+    public void selectGroup(GroupData group) {
+        click(By.name("group"));
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
+    }
+
+    //контакты при [all]
+    public void checkAllPage() {
+        click(By.name("group"));
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText("[all]");
+        wd.get("http://localhost/addressbook/?group=");
+
+    }
+
+    public void deleteContactFromGroup(ContactData contact) {
+        selectContactById(contact.getId());
+        wd.findElement(By.name("remove")).click();
+    }
+
+    public void checkContactInGroup(GroupData group) {
         click(By.name("group"));
         new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
     }

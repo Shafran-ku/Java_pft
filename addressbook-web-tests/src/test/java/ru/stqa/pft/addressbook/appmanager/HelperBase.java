@@ -60,7 +60,7 @@ public class HelperBase {
     }
 
     //метод поиска элемента на странице (по какому-нибудь локатору)
-    protected boolean isElementPresent(By locator) {
+    public boolean isElementPresent(By locator) {
         try {
             wd.findElement(locator);
             return true;
