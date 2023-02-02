@@ -1,0 +1,44 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.testng:testng:7.5'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.3.0'
+    implementation 'org.hamcrest:java-hamcrest:2.0.0.0'
+}
+
+//указали использовать фреймворк TestNG
+//запуск тестового набора для групп
+test {
+    useTestNG {
+        //указали какой конфиг тестового набора должны использовать
+        suites 'src/test/resources/testng.xml'
+    }
+
+    //передача системных свойств сборщику Gradle (определенные параметры запуска, например используемый тип браузера)
+    // при запуске тестов из консоли (gradlew -Pbrowser=chrome testContacts)
+
+    //проверка указан ли тип браузера при запуске из командн стр, если нет то используем дефолтн зн-е браузера в TestBase
+    if (project.hasProperty('browser')) {
+        //${browser} для того чтобы системные свойства сборщика преобразовать в обычные системные свойства для офмф
+        systemProperty 'browser', "${browser}"
+    }
+
+    //пробрасываем свойство target в java машину
+    /*
+    свойство target – в качестве параметра передаем в командную строку имя конфигурационного файла, в котором хранится инф-ия
+    о тестируемой системе, например имя local (тогда инф-ия будет загружена из ../resources/local/properties)
+    */
+    if (project.hasProperty('target')) {
+        //${browser} для того чтобы системные свойства сборщика преобразовать в обычные системные свойства для офмф
+        systemProperty 'target', "${target}"
+    }
+
+    //пробрасываем свойство verifyUI в java машину - вкл/выкл проверки загрузки данных из UI для тестов
+    if (project.hasProperty('verifyUI')) {
+        systemProperty 'verifyUI', "${verifyUI}"
+    }
+}
