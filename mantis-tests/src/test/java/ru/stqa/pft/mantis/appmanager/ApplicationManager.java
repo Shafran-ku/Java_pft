@@ -50,4 +50,15 @@ public class ApplicationManager {
     public void stop() {
         wd.quit();
     }
+
+    //метод инициализирует помощника при каждом обращении (можно открывать много сессий, т.к. помощник легковесный)
+    //т.е. тесты будут выполняться не в браузере, а на уровне сетевого протокола
+    public HttpSession newSession() {
+        return new HttpSession(this);
+    }
+
+    //в качестве параметра принимает имя того свойства которое надо извлечь
+    public Object getProperty(String key) {
+        return properties.getProperty(key);
+    }
 }
