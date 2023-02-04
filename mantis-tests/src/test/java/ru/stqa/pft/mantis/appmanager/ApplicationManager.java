@@ -14,9 +14,10 @@ import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
     private final Properties properties;
-    WebDriver wd;
+    private WebDriver wd;
 
     private String browser;
+    private RegistrationHelper registrationHelper;
 
 
     public ApplicationManager(String browser) throws IOException {
@@ -24,6 +25,7 @@ public class ApplicationManager {
         properties = new Properties();
     }
 
+    //при вызове метода init только загружается конфиг-ый файл
     public void init() throws IOException {
         //загрузка свойств из конфигурационного файла (local.properties)
 
@@ -32,23 +34,13 @@ public class ApplicationManager {
 
         //вместо %s будет подставлен target
         properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
-
-        if (browser.equals(BrowserType.FIREFOX)) {
-            wd = new FirefoxDriver();
-        } else if (browser.equals(BrowserType.CHROME)) {
-            wd = new ChromeDriver();
-        } else if (browser.equals(BrowserType.IE)) {
-            wd = new InternetExplorerDriver();
-        }
-        wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-
-        //использование загруженных свойств из конфигурационного файла (local.properties)
-        wd.get(properties.getProperty("web.baseUrl"));
-
     }
 
     public void stop() {
-        wd.quit();
+        //если не null то остановить
+        if (wd !=null ) {
+            wd.quit();
+        }
     }
 
     //метод инициализирует помощника при каждом обращении (можно открывать много сессий, т.к. помощник легковесный)
@@ -60,5 +52,32 @@ public class ApplicationManager {
     //в качестве параметра принимает имя того свойства которое надо извлечь
     public Object getProperty(String key) {
         return properties.getProperty(key);
+    }
+
+    public RegistrationHelper registration() {
+        //
+        if (registrationHelper == null) {
+            registrationHelper = new RegistrationHelper(this);
+        }
+        return registrationHelper;
+    }
+
+    public WebDriver getDriver() {
+        //ленивая инициализация
+        //если драйвер не проинициализирован, то проинициализировать и вернуть
+        if (wd == null) {
+            if (browser.equals(BrowserType.FIREFOX)) {
+                wd = new FirefoxDriver();
+            } else if (browser.equals(BrowserType.CHROME)) {
+                wd = new ChromeDriver();
+            } else if (browser.equals(BrowserType.IE)) {
+                wd = new InternetExplorerDriver();
+            }
+            wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+
+            //использование загруженных свойств из конфигурационного файла (local.properties)
+            wd.get(properties.getProperty("web.baseUrl"));
+        }
+        return wd;
     }
 }
