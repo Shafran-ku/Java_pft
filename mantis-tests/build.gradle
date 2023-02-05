@@ -9,6 +9,7 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:4.3.0'
     implementation 'org.hamcrest:java-hamcrest:2.0.0.0'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'    //для работы по http
+    implementation 'commons-net:commons-net:3.9.0'                  //для работы по ftp
 }
 
 //указали использовать фреймворк TestNG

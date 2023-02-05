@@ -18,6 +18,7 @@ public class ApplicationManager {
 
     private String browser;
     private RegistrationHelper registrationHelper;
+    private FtpHelper ftp;
 
 
     public ApplicationManager(String browser) throws IOException {
@@ -50,7 +51,7 @@ public class ApplicationManager {
     }
 
     //в качестве параметра принимает имя того свойства которое надо извлечь
-    public Object getProperty(String key) {
+    public String getProperty(String key) {             //не работало когда было public Object getProperty(String key)
         return properties.getProperty(key);
     }
 
@@ -60,6 +61,14 @@ public class ApplicationManager {
             registrationHelper = new RegistrationHelper(this);
         }
         return registrationHelper;
+    }
+
+    //this - ссылка на application manager
+    public FtpHelper ftp() {
+        //если помощник не иниициализирован, то менеджер его иниц-ет
+        if (ftp == null) {
+            ftp = new FtpHelper(this);
+        } return ftp;
     }
 
     public WebDriver getDriver() {
