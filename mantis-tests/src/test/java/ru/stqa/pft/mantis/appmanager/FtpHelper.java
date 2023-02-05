@@ -26,7 +26,7 @@ public class FtpHelper {
         ftp.login(app.getProperty("ftp.login"), app.getProperty("ftp.password"));
         //удаляем предыдущую резервную копию
         ftp.deleteFile(backup);
-        //переименовываем удяляемый файл (делаем резервную копию)
+        //переименовываем удяляемый файл в .bak (делаем резервную копию)
         ftp.rename(target, backup);
         //включаем пассивный режим передачи данных (ограничения используемого ftp-сервера)
         ftp.enterLocalPassiveMode();
@@ -44,7 +44,7 @@ public class FtpHelper {
         ftp.login(app.getProperty("ftp.login"), app.getProperty("ftp.password"));
         //удаляем предыдущую резервную копию
         ftp.deleteFile(target);
-        //переименовываем удяляемый файл (делаем резервную копию)
+        //переименовываем .bak файл обратно (делаем резервную копию)
         ftp.rename(backup, target);
         //разрыв соединения после передачи
         ftp.disconnect();
