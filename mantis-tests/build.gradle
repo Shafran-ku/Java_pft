@@ -8,8 +8,10 @@ dependencies {
     implementation 'org.testng:testng:7.5'
     implementation 'org.seleniumhq.selenium:selenium-java:4.3.0'
     implementation 'org.hamcrest:java-hamcrest:2.0.0.0'
-    implementation 'org.apache.httpcomponents:httpclient:4.5.14'    //для работы по http
-    implementation 'commons-net:commons-net:3.9.0'                  //для работы по ftp
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'        //для работы по http
+    implementation 'commons-net:commons-net:3.9.0'                      //для работы по ftp
+    implementation 'org.subethamail:subethasmtp:3.1.7'                  //для работы с почтой
+    implementation 'ru.lanwen.verbalregex:java-verbal-expressions:1.8'  //для работы с регулярками - вербализует язык
 }
 
 //указали использовать фреймворк TestNG
