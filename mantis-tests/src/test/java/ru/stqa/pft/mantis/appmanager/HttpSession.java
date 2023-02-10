@@ -54,7 +54,7 @@ public class HttpSession {
         String body = geTextFrom(response);
 
         //проверяется действительно ли пользователь залогинен (код страницы должен содержать нужную строчку)
-        return body.contains(String.format("<span class=\"label hidden-xs label-default arrowed\">%s</span>", username));
+        return body.contains(String.format("<span class=\"user-info\">%s</span", username));
     }
 
     private String geTextFrom(CloseableHttpResponse response) throws IOException {
@@ -75,6 +75,6 @@ public class HttpSession {
         //получаем текст с помощью функции
         String body = geTextFrom(response);
         //проверяем что в тексте страницы содержится нужный фрагмент (залогинн тот юзер который интересует)
-        return body.contains(String.format("<span class=\"label hidden-xs label-default arrowed\">%s</span>", username));
+        return body.contains(String.format("<span class=\"user-info\">%s</span", username));
     }
 }

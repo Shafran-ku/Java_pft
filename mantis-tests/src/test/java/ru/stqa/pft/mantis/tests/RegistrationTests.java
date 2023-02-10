@@ -21,11 +21,18 @@ public class RegistrationTests extends TestBase{
     }
 
     @Test
-    public void testRegistration() throws MessagingException, IOException {
+    public void testRegistration() throws IOException, MessagingException {
 
-        String user = "user10";
+        //ф-ия возвращает теущее время в мс от 01.01.1970
+        long now = System.currentTimeMillis();
+
+        //имя юзера будет уникальным с добавленной переменной now
+        String user = String.format("user%s", now);
         String password = "password";
-        String email = "user10@localhost.localdomain";
+
+        //уникальную переменную добавили также в почту
+        String email = String.format("user%s@localhost.localdomain", now);
+
         app.registration().start(user, email);
         List<MailMessage> mailMessages = app.mail().waitForMail(2,10000);
         //найти все письма которые пришли этому пользователю и извлечь сссылку из письма

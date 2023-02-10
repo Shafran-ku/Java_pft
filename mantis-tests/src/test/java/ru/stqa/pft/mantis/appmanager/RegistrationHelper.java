@@ -31,8 +31,7 @@ public class RegistrationHelper extends HelperBase {
         //заполняем 2 поля
         type(By.name("password"), password);
         type(By.name("password_confirm"), password);
-
         //нажать Update User
-        click(By.cssSelector("input[value='Update User']"));
+        click(By.xpath("//form[@id='account-update-form']/fieldset/span/button/span"));
     }
 }
