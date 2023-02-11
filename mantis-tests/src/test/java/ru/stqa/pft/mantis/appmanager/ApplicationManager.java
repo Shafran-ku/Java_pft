@@ -20,6 +20,7 @@ public class ApplicationManager {
     private RegistrationHelper registrationHelper;
     private FtpHelper ftp;
     private MailHelper mailHelper;
+    private JamesHelper jamesHelper;
 
 
     public ApplicationManager(String browser) throws IOException {
@@ -91,11 +92,19 @@ public class ApplicationManager {
         return wd;
     }
 
-    //Ленивая инициализаия
+    //Ленивая инициализация
     public MailHelper mail() {
         if (mailHelper == null) {
             mailHelper = new MailHelper(this);
         }
         return mailHelper;
+    }
+
+    //Ленивая инициализация
+    public JamesHelper james() {
+        if (jamesHelper == null) {
+            jamesHelper = new JamesHelper(this);
+        }
+        return jamesHelper;
     }
 }

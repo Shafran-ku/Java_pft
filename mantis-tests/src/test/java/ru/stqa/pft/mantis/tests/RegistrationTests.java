@@ -15,7 +15,7 @@ import static org.testng.AssertJUnit.assertTrue;
 public class RegistrationTests extends TestBase{
 
     //перед началом тестов запускаем заново почтовый сервер, чтобы старая почта пропадала
-    @BeforeMethod
+    //@BeforeMethod
     public void startMailServer() {
         app.mail().start();
     }
@@ -23,7 +23,7 @@ public class RegistrationTests extends TestBase{
     @Test
     public void testRegistration() throws IOException, MessagingException {
 
-        //ф-ия возвращает теущее время в мс от 01.01.1970
+        //ф-ия возвращает текущее время в мс от 01.01.1970
         long now = System.currentTimeMillis();
 
         //имя юзера будет уникальным с добавленной переменной now
@@ -33,8 +33,18 @@ public class RegistrationTests extends TestBase{
         //уникальную переменную добавили также в почту
         String email = String.format("user%s@localhost.localdomain", now);
 
+        //создание юзера на внешнем почт.сервере
+        app.james().createUser(user, password);
+
+        //1ая часть регистрации юзера, после чего должно прийти письмо
         app.registration().start(user, email);
-        List<MailMessage> mailMessages = app.mail().waitForMail(2,10000);
+
+        //получение письма из встроенного почт.сервера
+        //List<MailMessage> mailMessages = app.mail().waitForMail(2,10000);
+
+        //получение письма из внешнего почт.сервера
+        List<MailMessage> mailMessages = app.james().waitForMail(user, password, 60000);
+
         //найти все письма которые пришли этому пользователю и извлечь сссылку из письма
         String confirmationLink = findConfirmationLink(mailMessages, email);
 
@@ -57,9 +67,8 @@ public class RegistrationTests extends TestBase{
         return regex.getText(mailMessage.text);
     }
 
-
     //alwaysRun = true - всегда выполнять, даже когда тест упал
-    @AfterMethod(alwaysRun = true)
+    //@AfterMethod(alwaysRun = true)
     public void stopMailServer() {
         app.mail().stop();
     }
