@@ -1,5 +1,6 @@
 package ru.stqa.pft.mantis.appmanager;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -9,6 +10,7 @@ import org.openqa.selenium.remote.BrowserType;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +23,7 @@ public class ApplicationManager {
     private FtpHelper ftp;
     private MailHelper mailHelper;
     private JamesHelper jamesHelper;
+    private LoginHelper loginHelper;
 
 
     public ApplicationManager(String browser) throws IOException {
@@ -46,6 +49,16 @@ public class ApplicationManager {
         }
     }
 
+    //проверяем элемент
+    public boolean isElementPresent(By by) {
+        try {
+            wd.findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
     //метод инициализирует помощника при каждом обращении (можно открывать много сессий, т.к. помощник легковесный)
     //т.е. тесты будут выполняться не в браузере, а на уровне сетевого протокола
     public HttpSession newSession() {
@@ -58,7 +71,6 @@ public class ApplicationManager {
     }
 
     public RegistrationHelper registration() {
-        //
         if (registrationHelper == null) {
             registrationHelper = new RegistrationHelper(this);
         }
@@ -106,5 +118,13 @@ public class ApplicationManager {
             jamesHelper = new JamesHelper(this);
         }
         return jamesHelper;
+    }
+
+    //Ленивая инициализация
+    public LoginHelper login(){
+        if (loginHelper == null) {
+            loginHelper = new LoginHelper(this);
+        }
+        return loginHelper;
     }
 }

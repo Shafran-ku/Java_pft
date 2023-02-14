@@ -15,7 +15,7 @@ import static org.testng.AssertJUnit.assertTrue;
 public class RegistrationTests extends TestBase{
 
     //перед началом тестов запускаем заново почтовый сервер, чтобы старая почта пропадала
-    //@BeforeMethod
+    @BeforeMethod       //для работы с внешним почт.сервером закомментить
     public void startMailServer() {
         app.mail().start();
     }
@@ -34,21 +34,21 @@ public class RegistrationTests extends TestBase{
         String email = String.format("user%s@localhost.localdomain", now);
 
         //создание юзера на внешнем почт.сервере
-        app.james().createUser(user, password);
+        //app.james().createUser(user, password);            //для работы с внешним почт.сервером закомментить
 
         //1ая часть регистрации юзера, после чего должно прийти письмо
         app.registration().start(user, email);
 
         //получение письма из встроенного почт.сервера
-        //List<MailMessage> mailMessages = app.mail().waitForMail(2,10000);
+        List<MailMessage> mailMessages = app.mail().waitForMail(2,10000);
 
         //получение письма из внешнего почт.сервера
-        List<MailMessage> mailMessages = app.james().waitForMail(user, password, 60000);
+        //List<MailMessage> mailMessages = app.james().waitForMail(user, password, 60000);
 
         //найти все письма которые пришли этому пользователю и извлечь сссылку из письма
         String confirmationLink = findConfirmationLink(mailMessages, email);
 
-        app.registration().finish(confirmationLink, password);
+        app.registration().finish(confirmationLink, password, user);
 
         //проверка что после регистрации юзер может войти в си-му
         assertTrue(app.newSession().login(user, password));
@@ -68,7 +68,7 @@ public class RegistrationTests extends TestBase{
     }
 
     //alwaysRun = true - всегда выполнять, даже когда тест упал
-    //@AfterMethod(alwaysRun = true)
+    @AfterMethod(alwaysRun = true)       //для работы с внешним почт.сервером закомментить
     public void stopMailServer() {
         app.mail().stop();
     }
