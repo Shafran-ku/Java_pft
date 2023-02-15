@@ -21,7 +21,7 @@ public class RegistrationTests extends TestBase{
     }
 
     @Test
-    public void testRegistration() throws IOException, MessagingException {
+    public void testRegistration() throws IOException, MessagingException, InterruptedException {
 
         //ф-ия возвращает текущее время в мс от 01.01.1970
         long now = System.currentTimeMillis();
@@ -36,6 +36,7 @@ public class RegistrationTests extends TestBase{
         //создание юзера на внешнем почт.сервере
         //app.james().createUser(user, password);            //для работы с внешним почт.сервером закомментить
 
+        /*
         //1ая часть регистрации юзера, после чего должно прийти письмо
         app.registration().start(user, email);
 
@@ -48,12 +49,14 @@ public class RegistrationTests extends TestBase{
         //найти все письма которые пришли этому пользователю и извлечь сссылку из письма
         String confirmationLink = findConfirmationLink(mailMessages, email);
 
-        app.registration().finish(confirmationLink, password, user);
+        */
+        app.registration().registrationNewUser(email, user, password);
 
         //проверка что после регистрации юзер может войти в си-му
         assertTrue(app.newSession().login(user, password));
     }
 
+    /*
     private String findConfirmationLink(List<MailMessage> mailMessages, String email) {
         //фильтруем сообщения по нужному адресу
         MailMessage mailMessage = mailMessages.stream().filter((m) -> m.to.equals(email)).findFirst().get();
@@ -66,6 +69,7 @@ public class RegistrationTests extends TestBase{
         //вернуть кусок текста, соответствующее построенному регулярному выражению
         return regex.getText(mailMessage.text);
     }
+    */
 
     //alwaysRun = true - всегда выполнять, даже когда тест упал
     @AfterMethod(alwaysRun = true)       //для работы с внешним почт.сервером закомментить

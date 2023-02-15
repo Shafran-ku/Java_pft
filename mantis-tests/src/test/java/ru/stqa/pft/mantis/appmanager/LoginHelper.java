@@ -7,6 +7,8 @@ public class LoginHelper extends HelperBase{
     public LoginHelper(ApplicationManager app) {
         super(app);
     }
+
+    //вход под пользователем
     public void login (String username, String password) {
         wd.get(app.getProperty("web.baseUrl") + "/login_page.php");
         type(By.name("username"), username);
@@ -20,7 +22,7 @@ public class LoginHelper extends HelperBase{
         login("administrator", "root");
     }
 
-    //вход в ManageUsers
+    //перейти в ManageUsers
     public void manageUsers(By locator) {
         app.login().click(locator);
         app.login().click(By.linkText("Manage Users"));

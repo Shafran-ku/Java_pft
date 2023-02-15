@@ -3,9 +3,12 @@ package ru.stqa.pft.mantis.tests;
 import org.openqa.selenium.By;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import ru.lanwen.verbalregex.VerbalExpression;
 import ru.stqa.pft.mantis.model.MailMessage;
+import ru.stqa.pft.mantis.model.UserData;
+import ru.stqa.pft.mantis.model.Users;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -21,6 +24,14 @@ public class PasswordChangeTests extends TestBase {
         app.mail().start();
     }
 
+    //проверка наличия юзера для теста - если всего 1 то создать нового
+    @BeforeTest
+    public void ensurePreconditions() throws InterruptedException, MessagingException, IOException {
+        if (app.db().users().size() == 1) {
+            app.registration().registrationNewUser("userNew@localhost.localdomain", "userNew", "password");
+        }
+    }
+
     @Test
     public void testChangePassword() throws IOException, MessagingException {
 
@@ -30,13 +41,12 @@ public class PasswordChangeTests extends TestBase {
         //переходим на Manage
         app.login().manageUsers(By.xpath("//div[@id='sidebar']/ul/li[6]/a/i"));
 
-        //нашли юзера
-        String username = String.format(app.getDriver().findElement(By.xpath("//tbody/tr[2]/td[1]/a")).getText());
-
-        //берем почт.адрес
-        String email1 = String.format(app.getDriver().
-                findElement(By.xpath("//tbody/tr[2]/td[3]")).getText());
-        String password1 = "root1";
+        //берем юзера и его почту
+        Users user = app.db().users();
+        UserData userPassword = user.iterator().next();
+        String username = userPassword.getUsername();
+        String email = userPassword.getEmail();
+        String passwordNew = "root";
 
         //зашли в юзера и нажали Reset Password
         app.login().click(By.linkText(String.format("%s", username)));
@@ -45,13 +55,13 @@ public class PasswordChangeTests extends TestBase {
         //проверить почту
         List<MailMessage> mailMessages = app.mail().waitForMail(1, 10000);
         //найти ссылку подтверждения
-        String confirmationLink = findConfirmationLink(mailMessages, email1);
+        String confirmationLink = findConfirmationLink(mailMessages, email);
 
         //пройти по ссылке, ввести новый пароль
-        app.registration().finish(confirmationLink, password1, username);
+        app.registration().finish(confirmationLink, passwordNew, username);
 
         //проверить вход с новым паролем
-        assertTrue(app.newSession().login(username, password1));
+        assertTrue(app.newSession().login(username, passwordNew));
     }
 
     //вытаскиваем ссылку для подтверждения регистрации

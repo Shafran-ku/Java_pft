@@ -24,6 +24,7 @@ public class ApplicationManager {
     private MailHelper mailHelper;
     private JamesHelper jamesHelper;
     private LoginHelper loginHelper;
+    private DbHelper dbHelper;
 
 
     public ApplicationManager(String browser) throws IOException {
@@ -40,6 +41,8 @@ public class ApplicationManager {
 
         //вместо %s будет подставлен target
         properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
+
+        dbHelper = new DbHelper();
     }
 
     public void stop() {
@@ -126,5 +129,9 @@ public class ApplicationManager {
             loginHelper = new LoginHelper(this);
         }
         return loginHelper;
+    }
+
+    public DbHelper db() {
+        return dbHelper;
     }
 }
