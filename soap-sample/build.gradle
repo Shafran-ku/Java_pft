@@ -1,0 +1,35 @@
+apply plugin: 'java'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //implementation 'org.testng:testng:7.5'
+    implementation 'org.testng:testng:7.7.0'
+    implementation 'javax.xml.ws:jaxws-api:2.3.1'
+    implementation 'com.sun.xml.ws:jaxws-ri:2.3.3'
+}
+
+//плагин для подключения плагина wsdl2java для soap
+buildscript{
+    repositories{
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'no.nils:wsdl2java:0.12'
+    }
+}
+
+apply plugin: 'no.nils.wsdl2java'
+
+//подключение плагина
+wsdl2java {
+    wsdlDir = file("src/main/resources") // define to support incremental build
+    wsdlsToGenerate = [   //  2d-array of wsdls and cxf-parameters
+                          ["$projectDir/src/main/resources/geoipservice.wsdl"],
+    ]
+    cxfVersion = "2.7.0"  //явно указали версию библиотеки , т.к. подтягивается более новая версия и она не совместима с плагином wsdl 12
+}
