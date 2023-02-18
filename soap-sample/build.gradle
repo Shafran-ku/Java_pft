@@ -8,8 +8,9 @@ repositories {
 dependencies {
     //implementation 'org.testng:testng:7.5'
     implementation 'org.testng:testng:7.7.0'
-    implementation 'javax.xml.ws:jaxws-api:2.3.1'
-    implementation 'com.sun.xml.ws:jaxws-ri:2.3.3'
+    implementation 'javax.xml.ws:jaxws-api:2.3.1'                           //чтобы запустить soap по 9.2
+    implementation 'com.sun.xml.ws:jaxws-ri:2.3.3'                          //чтобы запустить soap по 9.2
+    implementation 'biz.futureware.mantis:mantis-axis-soap-client:1.2.19'   //
 }
 
 //плагин для подключения плагина wsdl2java для soap
