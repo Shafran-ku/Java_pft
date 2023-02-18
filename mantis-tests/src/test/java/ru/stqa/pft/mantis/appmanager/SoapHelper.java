@@ -24,7 +24,7 @@ public class SoapHelper {
     public Set<Project> getProjects() throws RemoteException, MalformedURLException, ServiceException {
         //метод для извлечения проектов
         MantisConnectPortType mc = new MantisConnectLocator().
-                getMantisConnectPort(new URL("http://localhost/mantisbt-2.25.5/api/soap/mantisconnect.php"));
+                getMantisConnectPort(new URL("http://localhost/mantisbt-2.25.4/api/soap/mantisconnect.php"));
         //массив проектов к которому administrator имеет доступ
         ProjectData[] projects = mc.mc_projects_get_user_accessible("administrator", "root");
 
@@ -39,7 +39,7 @@ public class SoapHelper {
 
     private MantisConnectPortType getMantisConnect() throws ServiceException, MalformedURLException {
         return new MantisConnectLocator()
-                .getMantisConnectPort(new URL("http://localhost/mantisbt-2.25.5/api/soap/mantisconnect.php"));
+                .getMantisConnectPort(new URL("http://localhost/mantisbt-2.25.4/api/soap/mantisconnect.php"));
     }
 
 
