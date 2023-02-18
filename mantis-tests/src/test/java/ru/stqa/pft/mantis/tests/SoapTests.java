@@ -35,4 +35,10 @@ public class SoapTests extends TestBase {
         //сравниваем новый проект Issue с существующим
         assertEquals(issue.getSummary(), created.getSummary());
     }
+
+    @Test
+    public void testSkippedIssue() throws MalformedURLException, ServiceException, RemoteException {
+        int createdIssueId = 1;
+        skipIfNotFixed(createdIssueId);
+    }
 }
