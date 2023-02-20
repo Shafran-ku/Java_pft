@@ -4,9 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.message.BasicNameValuePair;
+import com.jayway.restassured.RestAssured;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -14,19 +13,25 @@ import java.util.Set;
 
 import static org.testng.Assert.assertEquals;
 
-public class RestTests {
+public class RestAssuredTests {
+    //для того чтобы RestAssured выполнял вход с указанным логином и паролем при каждом обращении к RestAssured
+    @BeforeClass
+    public void init() {
+        RestAssured.authentication = RestAssured.basic("7172fcb5f1888f5fac3dced24caeaa6a", "");
+    }
+
 
     @Test
     public void testCreateIssue() throws IOException {
         //берем старый список
-        Set<Issue> oldIssues = getIssues();
+        Set<Issue> oldIssues = getIssue();
 
         //создаем новый issue
         Issue newIssue = new Issue().withSubject("my test issue").withDescription("My New test issue");
         int issueId = createIssue(newIssue);
 
         //прописать иденификатор в новый объект который мы создали
-        Set<Issue> newIssues = getIssues();
+        Set<Issue> newIssues = getIssue();
 
         //добавить этот объект в старый набор
         oldIssues.add(newIssue.withId(issueId));
@@ -36,41 +41,33 @@ public class RestTests {
 
     }
 
-    private Set<Issue> getIssues() throws IOException {
-        //авторизация
-        String json = getExecutor().execute(Request.Get("https://bugify.stqa.ru/api/issues.json?limit=500"))
-                .returnContent().asString();
+    private Set<Issue> getIssue() throws IOException {
+
+       //авторизация
+        RestAssured.get("https://bugify.stqa.ru/api/issues.json").asString();
 
         JsonElement parsed = new JsonParser().parse(json);
         JsonElement issues = parsed.getAsJsonObject().get("issues");
 
         //преобразуем в множество объектов модельных;
-        //первый параметр - откуда должна извлекаться инф-ия,
+        // первый параметр - откуда должна извлекаться инф-ия,
         // 2ой параметр описывает тип данных который должен получиться в конце
         return new Gson().fromJson(issues, new TypeToken<Set<Issue>>() {
         }.getType());
     }
 
-    //авторизация
-    private Executor getExecutor() {
-        //указываем Ключ для доступа, пароль пустой
-        return Executor.newInstance().auth("7172fcb5f1888f5fac3dced24caeaa6a", "");
-    }
-
     //создание баг-репорта
     private int createIssue(Issue newIssue) throws IOException {
-        //bodyForm - для передачи параметров
-        String json = getExecutor().execute(
-                Request.Post("https://bugify.stqa.ru/api/issues.json").
-                        bodyForm(
-                                //имя параметра, значение параметра
-                                new BasicNameValuePair("subject", newIssue.getSubject()),
-                                new BasicNameValuePair("description", newIssue.getDescription())
-                        )).returnContent().asString();
+        //выполняем запрос на указанный адрес и передаем параметры
+        //ответ получаем в виде строки (текст в формате json)
+        String json = RestAssured.given()
+                .parameter("subject", newIssue.getSubject())
+                .parameter("description", newIssue.getDescription())
+                .post("https://bugify.stqa.ru/api/issues.json").asString();
 
-        //сначала анализируем строчку
+        //анализируем полученную строчку
         JsonElement parsed = new JsonParser().parse(json);
-        //извлекаем идентификатор созданного баг-репорта
+        //и извлекаем идентификатор созданного баг-репорта
         return parsed.getAsJsonObject().get("issue_id").getAsInt();
     }
 }
