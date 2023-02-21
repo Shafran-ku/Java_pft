@@ -24,14 +24,14 @@ public class RestAssuredTests {
     @Test
     public void testCreateIssue() throws IOException {
         //берем старый список
-        Set<Issue> oldIssues = getIssue();
+        Set<Issue> oldIssues = getIssues();
 
         //создаем новый issue
         Issue newIssue = new Issue().withSubject("my test issue").withDescription("My New test issue");
         int issueId = createIssue(newIssue);
 
         //прописать иденификатор в новый объект который мы создали
-        Set<Issue> newIssues = getIssue();
+        Set<Issue> newIssues = getIssues();
 
         //добавить этот объект в старый набор
         oldIssues.add(newIssue.withId(issueId));
@@ -41,10 +41,10 @@ public class RestAssuredTests {
 
     }
 
-    private Set<Issue> getIssue() throws IOException {
+    private Set<Issue> getIssues() throws IOException {
 
        //авторизация
-        RestAssured.get("https://bugify.stqa.ru/api/issues.json").asString();
+        String json = RestAssured.get("https://bugify.stqa.ru/api/issues.json?limit=500").asString();
 
         JsonElement parsed = new JsonParser().parse(json);
         JsonElement issues = parsed.getAsJsonObject().get("issues");
