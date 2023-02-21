@@ -11,8 +11,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10'                  //для работы с JSON
     implementation 'org.apache.httpcomponents:httpclient:4.5.1'    //для работы с http
     implementation 'org.apache.httpcomponents:fluent-hc:4.5.1'  //для работы с интерфейсом http клиента, который использует fluent интерфейс
-    implementation 'com.jayway.restassured:rest-assured:2.9.0'  //
-    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"    //xnjs
-    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
+    implementation 'com.jayway.restassured:rest-assured:2.9.0'
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"    //чтобы не было ошибки java.lang.NoClassDefFoundError: javax/xml/bind/JAXBException
+    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"          //чтобы не было ошибки java.lang.NoClassDefFoundError: javax/xml/bind/JAXBException
 }
 

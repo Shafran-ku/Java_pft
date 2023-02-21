@@ -8,6 +8,21 @@ public class Issue {
     private String subject;
     private String description;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Issue issue = (Issue) o;
+        return Objects.equals(state_name, issue.state_name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(state_name);
+    }
+
+    private Object state_name;
+
 
     public int getId() {
         return id;
@@ -36,18 +51,8 @@ public class Issue {
         return this;
     }
 
-    //equals and hashcode
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Issue issue = (Issue) o;
-        return id == issue.id && Objects.equals(subject, issue.subject) && Objects.equals(description, issue.description);
+    //статус issue
+    public Object getState_name() {
+        return state_name;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, subject, description);
-    }
-
 }
