@@ -7,5 +7,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.testng:testng:7.5'
+    //implementation 'org.testng:testng:7.5'
+    implementation 'org.testng:testng:7.0.0'    //понизил версию testng для jenkins
+}
+
+test {
+  useTestNG()
 }
