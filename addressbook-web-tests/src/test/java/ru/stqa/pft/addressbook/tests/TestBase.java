@@ -1,8 +1,5 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
-import org.openqa.selenium.remote.Browser;
 import org.openqa.selenium.remote.BrowserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +32,7 @@ public class TestBase {
 
     static {
         try {
-            app = new ApplicationManager(System.getProperty("browser", BrowserType.FIREFOX));
+            app = new ApplicationManager(System.getProperty("browser", BrowserType.CHROME));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
