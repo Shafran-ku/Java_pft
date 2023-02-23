@@ -66,4 +66,9 @@ public class MailHelper {
     public void stop() {
         wiser.stop();
     }
+
+    public List<MailMessage> getMailMessages() throws MessagingException, IOException {
+        List<MailMessage> mailMessages = app.mail().waitForMail(1, 10000);
+        return mailMessages;
+    }
 }

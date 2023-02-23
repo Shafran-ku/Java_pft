@@ -23,9 +23,9 @@ public class ApplicationManager {
     private FtpHelper ftp;
     private MailHelper mailHelper;
     private JamesHelper jamesHelper;
-    private LoginHelper loginHelper;
     private DbHelper dbHelper;
     private SoapHelper soapHelper;
+    private UserHelper user;
 
 
     public ApplicationManager(String browser) throws IOException {
@@ -124,6 +124,7 @@ public class ApplicationManager {
         return jamesHelper;
     }
 
+    /*
     //Ленивая инициализация
     public LoginHelper login(){
         if (loginHelper == null) {
@@ -131,6 +132,8 @@ public class ApplicationManager {
         }
         return loginHelper;
     }
+
+     */
 
     public DbHelper db() {
         return dbHelper;
@@ -142,5 +145,12 @@ public class ApplicationManager {
             soapHelper = new SoapHelper(this);
         }
         return soapHelper;
+    }
+    //Ленивая инициализация
+    public UserHelper user() {
+        if (user == null) {
+            user = new UserHelper(this);
+        }
+        return user;
     }
 }

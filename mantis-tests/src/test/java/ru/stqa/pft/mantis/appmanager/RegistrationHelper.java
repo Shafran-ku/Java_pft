@@ -1,7 +1,6 @@
 package ru.stqa.pft.mantis.appmanager;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import ru.lanwen.verbalregex.VerbalExpression;
 import ru.stqa.pft.mantis.model.MailMessage;
 
@@ -29,24 +28,11 @@ public class RegistrationHelper extends HelperBase {
 
     }
 
-    //завершение регистрации пользователя
-    public void finish(String confirmationLink, String password, String user) {
-        //проходим по ссылке
-        wd.get(confirmationLink);
-
-        //заполняем 2 поля
-        type(By.name("realname"), user); //new
-        type(By.name("password"), password);
-        type(By.name("password_confirm"), password);
-        //нажать Update User
-        click(By.xpath("//form[@id='account-update-form']/fieldset/span/button/span"));
-    }
-
-    //
+    //submit
     public void submitLink(String email, String user, String password) throws InterruptedException, MessagingException, IOException {
         List<MailMessage> mailMessages = app.mail().waitForMail(2, 1000);
         String confirmationLink = findConfirmationLink(mailMessages, email);
-        finish(confirmationLink, password, user);
+        app.user().confirmAccount(confirmationLink, password, user);
     }
 
     //получаем ссылку подтверждения
