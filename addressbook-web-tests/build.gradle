@@ -35,6 +35,11 @@ task testGroups(type: Test) {
         systemProperty 'browser', "${browser}"
     }
 
+    //передача платформы
+    if (project.hasProperty('platform')) {
+        systemProperty 'platform', "${platform}"
+    }
+
     //пробрасываем свойство target в java машину
     /*
     свойство target – в качестве параметра передаем в командную строку имя конфигурационного файла, в котором хранится инф-ия
@@ -65,6 +70,11 @@ task testContacts(type: Test) {
     if (project.hasProperty('browser')) {
         //${browser} для того чтобы свойства сборщика преобразовать в обычные системные свойства для java машины
         systemProperty 'browser', "${browser}"
+    }
+
+    //передача платформы
+    if (project.hasProperty('platform')) {
+        systemProperty 'platform', "${platform}"
     }
 
     //пробрасываем свойство target в java машину
