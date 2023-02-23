@@ -5,7 +5,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.testng:testng:7.5'
+    //implementation 'org.testng:testng:7.5'
+    implementation 'org.testng:testng:7.0.0'                    //для совместимости чтобы запускать в jenkins
     //implementation 'org.seleniumhq.selenium:selenium-java:4.7.0'
     implementation 'org.seleniumhq.selenium:selenium-java:4.3.0'
     implementation 'org.hamcrest:java-hamcrest:2.0.0.0'
