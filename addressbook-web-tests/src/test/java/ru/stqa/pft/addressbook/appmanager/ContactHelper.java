@@ -11,6 +11,8 @@ import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
 
+import static ru.stqa.pft.addressbook.tests.TestBase.app;
+
 public class ContactHelper extends HelperBase {
 
     //обращение к конструктору базового класса HelperBase
@@ -37,7 +39,7 @@ public class ContactHelper extends HelperBase {
         type(By.name("home"), contactData.getHomePhone());
 
         //добавляем также фото с полным путем к файлу
-        attach(By.name("photo"),contactData.getPhoto());
+        attach(By.name("photo"), contactData.getPhoto());
 
         //Если это создание контакта, то проверяем наличие выпадающего списка групп "new_group"
         //+проверка: если модификация контакта, то выпадающего списка групп быть не должно
@@ -203,7 +205,16 @@ public class ContactHelper extends HelperBase {
     //добавление в группу
     public void initAdditionToGroup(ContactData contact, GroupData group) {
         selectContactById(contact.getId());
-        addToGroup(group);
+        if (contact.getGroups().contains(group)) {
+            for (GroupData groupCopy : app.db().groups()) {
+                if (!contact.getGroups().contains(groupCopy)) {
+                    addToGroup(groupCopy);
+                    return;
+                }
+            }
+        } else {
+            addToGroup(group);
+        }
     }
 
     //добавление контакта в группу
@@ -237,9 +248,18 @@ public class ContactHelper extends HelperBase {
         wd.findElement(By.name("remove")).click();
     }
 
-    public void checkContactInGroup(GroupData group) {
+    //проверка что контакт В группе
+    public void checkContactInGroup(GroupData group, ContactData contact) {
         click(By.name("group"));
         new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
+        Assert.assertTrue(isElementPresent(By.id(Integer.toString(contact.getId()))));
+    }
+
+    //проверка что контакт НЕ в группе
+    public void checkContactNotInGroup(GroupData group, ContactData user) {
+        click(By.name("group"));
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
+        Assert.assertFalse(isElementPresent(By.id(Integer.toString(user.getId()))));
     }
 }
 

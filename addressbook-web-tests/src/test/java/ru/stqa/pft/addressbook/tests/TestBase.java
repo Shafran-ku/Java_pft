@@ -28,11 +28,11 @@ public class TestBase {
     Logger logger = LoggerFactory.getLogger(TestBase.class);
 
     //указали системное свойство тип браузера - он указывается в конфиге; если там не указан то по-умолчанию CHROME (BrowserType)
-    protected static final ApplicationManager app;    //выбор нужного браузера IE CHROME FIREFOX
+    public static final ApplicationManager app;    //выбор нужного браузера IE CHROME FIREFOX
 
     static {
         try {
-            app = new ApplicationManager(System.getProperty("browser", BrowserType.CHROME));
+            app = new ApplicationManager(System.getProperty("browser", BrowserType.FIREFOX));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

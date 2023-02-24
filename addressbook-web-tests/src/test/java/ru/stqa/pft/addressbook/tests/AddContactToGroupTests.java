@@ -7,9 +7,6 @@ import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-
 public class AddContactToGroupTests extends TestBase {
 
     //предусловия теста
@@ -30,37 +27,34 @@ public class AddContactToGroupTests extends TestBase {
 
     @Test
     public void testAddContactToGroup() {
-        //до добавления контакта из группы
-        Contacts before = app.db().contacts();
+        //выбор контакта
+        Contacts contact = app.db().contacts();
+        ContactData selectedContact = contact.iterator().next();
 
-        //данные контакта для добавления
-        ContactData selectedContact = before.iterator().next();
-
-        //кол-во групп
+        //выбор группы
         GroupData selectedGroup;
         Groups groups = app.db().groups();
 
-        //проверка если контакт уже есть в существующей группе(ах) то создать новую, иначе использовать существующую
+        //если контакт уже есть в выбранной группе то создать новую, иначе использовать существующую
         if (groups.size() == selectedContact.getGroups().size()) {
             GroupData newGroup = new GroupData().withName("test 2");
             selectedGroup = newGroup;
             app.goTo().groupPage();
             app.group().create(newGroup);
 
-        } else selectedGroup = groups.iterator().next();
+        } else {
+            selectedGroup = groups.iterator().next();
+        }
 
         app.goTo().HomePage();
 
-        //добавить контакт в созданную группу
+        //добавить контакт в выбранную группу
         app.contact().initAdditionToGroup(selectedContact, selectedGroup);
 
         app.goTo().HomePage();
 
         //проверить что контакт в группе
-        app.contact().checkContactInGroup(selectedGroup);
-        Contacts after = app.db().contacts();
-
-        assertThat(after, equalTo(before));
+        app.contact().checkContactInGroup(selectedGroup, selectedContact);
 
         //проверка загрузки данных из UI для тестов,
         //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
