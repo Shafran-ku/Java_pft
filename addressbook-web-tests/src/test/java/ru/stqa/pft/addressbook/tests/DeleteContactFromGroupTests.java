@@ -1,13 +1,14 @@
 
 package ru.stqa.pft.addressbook.tests;
 
-import org.openqa.selenium.By;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 public class DeleteContactFromGroupTests extends TestBase {
 
@@ -22,41 +23,30 @@ public class DeleteContactFromGroupTests extends TestBase {
         //если нет ни одного контакта то создать
         if (app.db().contacts().size() == 0) {
             app.goTo().HomePage();
-            app.contact().create(new ContactData().withFirstname("Den").withLastname("Kh."));
+            Groups groups = app.db().groups();
+            app.contact().create(new ContactData().withFirstname("Den").withLastname("Kh.")
+                    .inGroup(groups.iterator().next()));
         }
     }
 
     @Test
     public void testDeleteContactFromGroup() {
-        //выбор контакта
-        Contacts contacts = app.db().contacts();
-        ContactData selectedContact = contacts.iterator().next();
 
-        //выбор группы
-        Groups groups = app.db().groups();
-        GroupData selectedGroup = groups.iterator().next();
+        ContactData contact = app.db().contacts().iterator().next();
+        int id = contact.getId();
 
-        app.goTo().HomePage();
-        //выбрать группу
-        app.contact().selectGroup(selectedGroup);
-        //если выбранного контакта нет в выбраной группе, то добавить
-        if (app.db().contacts().size() == 0 ||
-                !app.contact().isElementPresent(By.cssSelector("input[value = '" + selectedContact.getId() + "']"))) {
-            //переключить в [All]
-            app.contact().checkAllPage();
-            app.contact().selectContactById(selectedContact.getId());
-            //добавить выбранный контакт в выбранную группу
-            app.contact().addToGroup(selectedGroup);
+        if(contact.getGroups().size() == 0){
+            GroupData group = app.db().groups().iterator().next();
             app.goTo().HomePage();
-            app.contact().selectGroup(selectedGroup);
+            app.contact().addContactToGroup(contact, group);
+            app.goTo().HomePage();
         }
 
-        //удаляем контакт из группы
-        app.contact().deleteContactFromGroup(selectedContact);
-        app.goTo().HomePage();
+        ContactData new_contact = app.db().getContactById(id);
+        Groups groupDelete = new_contact.getGroups();
+        app.contact().removeContactFromGroup(new_contact);
 
-        //проверка загрузки данных из UI для тестов,
-        //возможность отключать проверку с ui-через конфигуратор: в VM options добавить: -DverifyUI=true
-        verifyContactListInUI();
+        //проверить что контакт удален из группы
+        assertThat(app.db().getContactById(contact.getId()).getGroups().contains(groupDelete), equalTo(false));
     }
 }

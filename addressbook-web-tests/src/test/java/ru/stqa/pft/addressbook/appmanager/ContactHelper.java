@@ -11,8 +11,6 @@ import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
 
-import static ru.stqa.pft.addressbook.tests.TestBase.app;
-
 public class ContactHelper extends HelperBase {
 
     //обращение к конструктору базового класса HelperBase
@@ -100,7 +98,6 @@ public class ContactHelper extends HelperBase {
 
     //Кэш
     private Contacts contactCache = null;
-
 
     //возвращается множество
     public Contacts all() {
@@ -202,64 +199,42 @@ public class ContactHelper extends HelperBase {
         wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
     }
 
-    //добавление в группу
-    public void initAdditionToGroup(ContactData contact, GroupData group) {
-        selectContactById(contact.getId());
-        if (contact.getGroups().contains(group)) {
-            for (GroupData groupCopy : app.db().groups()) {
-                if (!contact.getGroups().contains(groupCopy)) {
-                    addToGroup(groupCopy);
-                    return;
-                }
-            }
-        } else {
-            addToGroup(group);
-        }
+    //смотрим контакты без групп
+    public void showContactsWithoutGroup() {
+
+        wd.findElement(By.name("group")).click();
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText("[none]");
+    }
+
+    //выбрать группу
+    public void selectGroupForContact(ContactData contact, GroupData group) {
+        if (contact.getGroups().size() > 0)
+            Assert.assertTrue(contact.getGroups().size() == 1);
+        new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(group.getName());
     }
 
     //добавление контакта в группу
-    public void addToGroup(GroupData group) {
-        click(By.name("to_group"));
-        new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(group.getName());
+    public void addContactToGroup(ContactData contact, GroupData group) {
+        selectContactById(contact.getId());
+        selectGroupForContact(contact, group);
+        addInGroup();
+    }
+
+    //добавить в группу
+    public void addInGroup() {
         click(By.name("add"));
     }
 
-    //проверка что добавлено
-    public void checkAdded(GroupData group) {
-        click(By.name("group"));
-        new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
-    }
-
-    public void selectGroup(GroupData group) {
-        click(By.name("group"));
-        new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
-    }
-
-    //контакты при [all]
-    public void checkAllPage() {
-        click(By.name("group"));
-        new Select(wd.findElement(By.name("group"))).selectByVisibleText("[all]");
-        wd.get("http://localhost/addressbook/?group=");
-
-    }
-
-    public void deleteContactFromGroup(ContactData contact) {
+    //удалить из группы
+    public void removeContactFromGroup(ContactData contact) {
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText(contact.getGroups().iterator().next().getName());
         selectContactById(contact.getId());
-        wd.findElement(By.name("remove")).click();
+        removeFromGroup();
     }
 
-    //проверка что контакт В группе
-    public void checkContactInGroup(GroupData group, ContactData contact) {
-        click(By.name("group"));
-        new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
-        Assert.assertTrue(isElementPresent(By.id(Integer.toString(contact.getId()))));
-    }
-
-    //проверка что контакт НЕ в группе
-    public void checkContactNotInGroup(GroupData group, ContactData user) {
-        click(By.name("group"));
-        new Select(wd.findElement(By.name("group"))).selectByVisibleText(group.getName());
-        Assert.assertFalse(isElementPresent(By.id(Integer.toString(user.getId()))));
+    private void removeFromGroup() {
+        click(By.name("remove"));
     }
 }
+
 

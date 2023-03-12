@@ -10,7 +10,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity                                 //аннотация объявляет класс ContactData привязанным к БД
-@Table(name = "addressbook")            //указали (name = "addressbook") т.к. имя таблицы не совпадает с именем класса (ContactData)
+@Table(name = "addressbook")
+//указали (name = "addressbook") т.к. имя таблицы не совпадает с именем класса (ContactData)
 public class ContactData {
     @Id
     @Column(name = "id")
@@ -236,7 +237,6 @@ public class ContactData {
         return id;
     }
 
-    //помечаем контакт как добавленый в группу
     public ContactData inGroup(GroupData group) {
         groups.add(group);
         return this;
